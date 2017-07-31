@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NAV_Comment_tool.parserClass.ObjectClass
+namespace NAV_Comment_tool.parserClass
 {
     class ObjectClass
     {
