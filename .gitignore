@@ -282,6 +282,9 @@ __pycache__/
 # tools/**
 # !tools/packages.config
 
+# Ignore resources folder
+Resources/*
+
 # Tabs Studio
 *.tss
 
