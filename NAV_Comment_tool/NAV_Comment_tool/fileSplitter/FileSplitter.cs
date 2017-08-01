@@ -8,7 +8,6 @@ namespace NAV_Comment_tool.fileSplitter
 {
     class FileSplitter
     {
-        enum types {}
         public static void splitFile(string path)
         {
             StreamWriter writer = null;
@@ -18,7 +17,7 @@ namespace NAV_Comment_tool.fileSplitter
             string name = "";
             try
             {
-                using(StreamReader inputfile = new StreamReader(path))
+                using(StreamReader inputfile = new StreamReader(path,Encoding.GetEncoding("ISO-8859-1")))
                 {
                     string line;
                     while((line = inputfile.ReadLine()) != null)
@@ -54,7 +53,7 @@ namespace NAV_Comment_tool.fileSplitter
                             
                             string fileName = string.Concat("Object ", newObject.Number.ToString(), " ", newObject.Type, " ", name, " .txt");
                             string savePath = Path.Combine(@"C:\Users\Administrator\Documents\Exported example objects", fileName);
-                            writer = new StreamWriter(savePath, true);
+                            writer = new StreamWriter(savePath, true, Encoding.GetEncoding("ISO-8859-1"));
 
                         }
                         writer.WriteLine(line);
