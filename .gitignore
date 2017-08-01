@@ -285,6 +285,9 @@ __pycache__/
 # Ignore resources folder
 Resources/*
 
+# Ignore temp folder
+NAV_Comment_tool/NAV_Comment_tool/TEMP/*
+
 # Tabs Studio
 *.tss
 
