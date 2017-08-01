@@ -42,7 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="fileSplitter\ExtractObjectParts.cs" />
     <Compile Include="fileSplitter\FileSplitter.cs" />
+    <Compile Include="fileSplitter\lookForTxtFiles.cs" />
     <Compile Include="parserClass\ChangeClass.cs" />
     <Compile Include="parserClass\ChangelogClass.cs" />
     <Compile Include="parserClass\ObjectClass.cs" />
