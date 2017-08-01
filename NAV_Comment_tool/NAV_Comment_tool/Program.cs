@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NAV_Comment_tool.fileSplitter;
 using System.IO;
 
 namespace NAV_Comment_tool
@@ -11,9 +9,10 @@ namespace NAV_Comment_tool
     {
         static void Main(string[] args)
         {
-            List<string> filesList = ImportFromTxt();
+            //List<string> filesList = ImportFromTxt();
 
-            Console.ReadKey();
+            //Console.ReadKey();
+            FileSplitter.splitFile(@"C:\Users\Administrator\Documents\Exported example objects\Objects.txt");
         }
 
         private static List<string> ImportFromTxt()

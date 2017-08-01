@@ -12,6 +12,7 @@ namespace NAV_Comment_tool.fileSplitter
         public static void splitFile(string path)
         {
             StreamWriter writer = null;
+            int count = 0;
             try
             {
                 using(StreamReader inputfile = new StreamReader(path))
@@ -19,13 +20,31 @@ namespace NAV_Comment_tool.fileSplitter
                     string line;
                     while((line = inputfile.ReadLine()) != null)
                     {
-                        if(writer == null || inputfile.ReadLine())
+                        if(writer == null || line.Contains("OBJECT "))
+                        {
+                            if(writer != null)
+                            {
+                                writer.Close();
+                                writer = null;
+                            }
+
+                            writer = new StreamWriter(@"C:\Users\Administrator\Documents\Exported example objects\file" + count.ToString() + ".txt", true);
+
+                            count = 0;
+                        }
+                        writer.WriteLine(line);
+                        ++count;
                     }
                 }
             }
+            finally
+            {
+                if (writer != null)
+                    writer.Close();
+            }
             //string fileText;
             //fileText = System.IO.File.ReadAllText(path);
-           
+
         }
     }
 }
