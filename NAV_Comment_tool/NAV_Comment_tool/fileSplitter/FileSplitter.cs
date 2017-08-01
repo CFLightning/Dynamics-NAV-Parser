@@ -15,7 +15,7 @@ namespace NAV_Comment_tool.fileSplitter
             StringBuilder builder = new StringBuilder();
             StringWriter sWriter = new StringWriter(builder);
             ObjectClass newObject = new ObjectClass();
-            // int count = 1;
+            string name = "";
             try
             {
                 using(StreamReader inputfile = new StreamReader(path))
@@ -27,12 +27,13 @@ namespace NAV_Comment_tool.fileSplitter
                         {
                             if(line.Contains("OBJECT "))
                             {
+                                name = "";
                                 string[] parameters = line.Split(' ');
-                                string name = "";
-                                for(int i=3; i > parameters.Length; i++)
+                                for(int i=3; i <= parameters.Length - 1; i++)
                                 {
                                     name = string.Concat(name, parameters[i]);
                                 }
+                                name = name.Replace("/", "");
                                 newObject = new ObjectClass(Int32.Parse(parameters[2]),parameters[1],name,"");
                             }
 
@@ -50,8 +51,10 @@ namespace NAV_Comment_tool.fileSplitter
 
                             builder = new StringBuilder();
                             sWriter = new StringWriter(builder);
-
-                            writer = new StreamWriter(@"C:\Users\Administrator\Documents\Exported example objects\file" + newObject.Number.ToString() + newObject.Type + " .txt", true);
+                            
+                            string fileName = string.Concat("Object ", newObject.Number.ToString(), " ", newObject.Type, " ", name, " .txt");
+                            string savePath = Path.Combine(@"C:\Users\Administrator\Documents\Exported example objects", fileName);
+                            writer = new StreamWriter(savePath, true);
 
                         }
                         writer.WriteLine(line);
