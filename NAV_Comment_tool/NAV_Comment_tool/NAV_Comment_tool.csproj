@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="fileSplitter\FileSplitter.cs" />
+    <Compile Include="parserClass\ChangeClass.cs" />
+    <Compile Include="parserClass\ChangelogClass.cs" />
+    <Compile Include="parserClass\ObjectClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

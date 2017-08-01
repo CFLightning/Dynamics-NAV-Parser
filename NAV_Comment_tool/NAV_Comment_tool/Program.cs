@@ -10,6 +10,8 @@ namespace NAV_Comment_tool
     {
         static void Main(string[] args)
         {
+            string fileText;
+            fileText = fileSplitter.FileSplitter.splitFile(@"C:\Users\Administrator\Documents\Exported example objects\Objects.txt");    
         }
     }
 }

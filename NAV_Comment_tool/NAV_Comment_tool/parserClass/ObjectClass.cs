@@ -11,10 +11,11 @@ namespace NAV_Comment_tool.parserClass
         private int number;
         private int type;
         private string name;
-        // private List<ChangeClass>
+        private List<ChangelogClass> changelog;
 
         public int Number { get => number; set => number = value; }
         public int Type { get => type; set => type = value; }
         public string Name { get => name; set => name = value; }
+        internal List<ChangelogClass> Changelog { get => changelog; set => changelog = value; }
     }
 }
