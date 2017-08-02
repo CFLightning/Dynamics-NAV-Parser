@@ -10,9 +10,8 @@ namespace NAV_Comment_tool.fileSplitter
     {
         public static void splitFile(string path)
         {
-            StreamWriter writer = null;
             StringBuilder builder = new StringBuilder();
-            StringWriter sWriter = new StringWriter(builder);
+            StringWriter sWriter = null; 
             ObjectClass newObject = new ObjectClass();
             string name = "";
             try
@@ -22,49 +21,44 @@ namespace NAV_Comment_tool.fileSplitter
                     string line;
                     while((line = inputfile.ReadLine()) != null)
                     {
-                        if(writer == null || line.Contains("OBJECT "))
+                        if (line.Contains("OBJECT "))
                         {
-                            if(line.Contains("OBJECT "))
+                            name = "";
+                            string[] parameters = line.Split(' ');
+                            for (int i = 3; i <= parameters.Length - 1; i++)
                             {
-                                name = "";
-                                string[] parameters = line.Split(' ');
-                                for(int i=3; i <= parameters.Length - 1; i++)
-                                {
-                                    name = string.Concat(name, parameters[i]);
-                                }
-                                name = name.Replace("/", "");
-                                newObject = new ObjectClass(Int32.Parse(parameters[2]),parameters[1],name,"");
+                                name = string.Concat(name, parameters[i]);
                             }
-
-                            if(writer != null)
+                            name = name.Replace("/", "");
+                            newObject = new ObjectClass(Int32.Parse(parameters[2]), parameters[1], name, "");
+                        }
+                        if (sWriter == null || line.Contains("OBJECT "))
+                        {
+                            if(sWriter != null)
                             {
-                                writer.Close();
                                 sWriter.Close();
-                                writer = null;
                                 sWriter = null;
                             }
+                            if(newObject.Name != "")
+                            {
+                                newObject.Contents = builder.ToString();
+                                ObjectClassRepository.appendObject(newObject);
+                            }
 
-                            
-                            newObject.Contents = builder.ToString();
-                            ObjectClassRepository.appendObject(newObject);
-
-                            builder = new StringBuilder();
+                            builder.Clear();
                             sWriter = new StringWriter(builder);
-                            
-                            string fileName = string.Concat("Object ", newObject.Number.ToString(), " ", newObject.Type, " ", name, " .txt");
-                            string savePath = Path.Combine(@"C:\Users\Administrator\Documents\Exported example objects", fileName);
-                            writer = new StreamWriter(savePath, true, Encoding.GetEncoding("ISO-8859-1"));
-
                         }
-                        writer.WriteLine(line);
+                        
                         sWriter.WriteLine(line);
+                        //writer.WriteLine(line);
+
                     }
                 }
             }
             finally
             {
-                if (writer != null)
-                    writer.Close();
+                if (sWriter != null)
+                    sWriter.Close();
             }
         }
     }

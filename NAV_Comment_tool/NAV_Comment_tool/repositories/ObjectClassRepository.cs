@@ -13,12 +13,9 @@ namespace NAV_Comment_tool.repositories
             objectRepository.Add(newObject);
         }
 
-        public static void listAll() // temporary checking function
+        public static List<ObjectClass> fetchRepo()
         {
-            foreach(ObjectClass item in objectRepository.ToArray()) {
-                Console.WriteLine(item.Contents);
-            }
-            
+            return objectRepository;
         }
     }
 }
