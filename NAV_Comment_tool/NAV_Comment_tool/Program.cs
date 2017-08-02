@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using NAV_Comment_tool.fileSplitter;
+﻿using NAV_Comment_tool.fileSplitter;
 using NAV_Comment_tool.repositories;
 using NAV_Comment_tool.indentationChecker;
-using System.IO;
-using NAV_Comment_tool.saveTool;
 
 namespace NAV_Comment_tool
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NAV_Comment_tool.parserClass;
 
 namespace NAV_Comment_tool.repositories

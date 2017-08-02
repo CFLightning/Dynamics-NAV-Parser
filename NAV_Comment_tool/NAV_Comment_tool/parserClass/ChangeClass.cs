@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NAV_Comment_tool.parserClass
+﻿namespace NAV_Comment_tool.parserClass
 {
     class ChangeClass
     {
