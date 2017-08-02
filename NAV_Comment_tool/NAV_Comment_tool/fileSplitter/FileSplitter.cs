@@ -21,18 +21,7 @@ namespace NAV_Comment_tool.fileSplitter
                     string line;
                     while((line = inputfile.ReadLine()) != null)
                     {
-                        if (line.Contains("OBJECT "))
-                        {
-                            name = "";
-                            string[] parameters = line.Split(' ');
-                            for (int i = 3; i <= parameters.Length - 1; i++)
-                            {
-                                name = string.Concat(name, parameters[i]);
-                            }
-                            name = name.Replace("/", "");
-                            newObject = new ObjectClass(Int32.Parse(parameters[2]), parameters[1], name, "");
-                        }
-                        if (sWriter == null || line.Contains("OBJECT "))
+                        if (sWriter == null || line.Contains("OBJECT ") || inputfile.EndOfStream)
                         {
                             if(sWriter != null)
                             {
@@ -48,10 +37,19 @@ namespace NAV_Comment_tool.fileSplitter
                             builder.Clear();
                             sWriter = new StringWriter(builder);
                         }
-                        
-                        sWriter.WriteLine(line);
-                        //writer.WriteLine(line);
 
+                        if (line.Contains("OBJECT "))
+                        {
+                            name = "";
+                            string[] parameters = line.Split(' ');
+                            for (int i = 3; i <= parameters.Length - 1; i++)
+                            {
+                                name = string.Concat(name, parameters[i]);
+                            }
+                            name = name.Replace("/", "");
+                            newObject = new ObjectClass(Int32.Parse(parameters[2]), parameters[1], name, "");
+                        }
+                        sWriter.WriteLine(line);
                     }
                 }
             }

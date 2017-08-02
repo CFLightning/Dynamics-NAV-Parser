@@ -49,7 +49,6 @@ namespace NAV_Comment_tool.indentationChecker
 
                 while (null != (line = reader.ReadLine()))
                 {
-                    //Console.WriteLine(line);
                     if(triggerFlag == false && beginFlag == false)
                     {
                         foreach (string flag in triggers)
@@ -80,9 +79,9 @@ namespace NAV_Comment_tool.indentationChecker
                             }
                             endsToGo--;
                         }
-                        if ( ((line.Length - line.TrimStart(' ').Length) <= currentIndentation) && triggerFlag == true && beginFlag == true)
+                        if ( ((line.Length - line.TrimStart(' ').Length) < currentIndentation) && triggerFlag == true && beginFlag == true && !(line.Contains("BEGIN")))
                         {
-                            line = line.PadLeft(currentIndentation - (line.Length - line.TrimStart(' ').Length));
+                            line = new string(' ', (line.Length - line.TrimStart(' ').Length)+2) + line;
                         }
                     }
                     writer.WriteLine(line);
@@ -90,10 +89,8 @@ namespace NAV_Comment_tool.indentationChecker
                 obj.Contents = builder.ToString();
 
                 writer.Close();
-                //writer = null;
                 builder = new StringBuilder();
                 writer = new StringWriter(builder);
-
             }
 
             foreach(ObjectClass obj in objList)

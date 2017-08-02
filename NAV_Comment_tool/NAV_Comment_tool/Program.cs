@@ -12,16 +12,8 @@ namespace NAV_Comment_tool
     {
         static void Main(string[] args)
         {
-            //List<string> filesList = ImportFromTxt();
-
-            //Console.ReadKey();
-            FileSplitter.splitFile(@"C:\Users\Administrator\Documents\Exported example objects\Objects.txt");
+            FileSplitter.splitFile(@"C:\Users\Administrator\Documents\Exported example objects\Objects.txt"); // TODO: Change hardcoded path to dynamically chosen one
             IndentationChecker.checkIndentations(ObjectClassRepository.fetchRepo());
-            //Console.Write(ObjectClassRepository.fetchRepo()[3]);
-           // SaveTool.saveToFiles(ObjectClassRepository.fetchRepo());
-            //split
-            //checkindents
-            //save
         }
     }
 }
