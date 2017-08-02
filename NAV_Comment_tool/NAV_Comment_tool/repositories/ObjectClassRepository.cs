@@ -5,7 +5,7 @@ namespace NAV_Comment_tool.repositories
 {
     class ObjectClassRepository
     {
-        private static List<ObjectClass> objectRepository = new List<ObjectClass>();
+        public static List<ObjectClass> objectRepository = new List<ObjectClass>();
 
         public static void appendObject(ObjectClass newObject)
         {

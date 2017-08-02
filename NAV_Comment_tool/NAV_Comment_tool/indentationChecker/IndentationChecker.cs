@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NAV_Comment_tool.parserClass;
-using NAV_Comment_tool.saveTool;
+using NAV_Comment_tool.repositories;
 using System.IO;
 using System;
 using System.Text;
@@ -35,10 +35,10 @@ namespace NAV_Comment_tool.indentationChecker
             triggers.Add("PROCEDURE");
         }
 
-        public static bool checkIndentations(List<ObjectClass> objList)
+        public static bool checkIndentations()
         {
             initTriggerList();
-            foreach(ObjectClass obj in objList)
+            foreach(ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 StringReader reader = new StringReader(obj.Contents);
                 StringBuilder builder = new StringBuilder();
@@ -93,10 +93,9 @@ namespace NAV_Comment_tool.indentationChecker
                 writer = new StringWriter(builder);
             }
 
-            foreach(ObjectClass obj in objList)
+            foreach(ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 Console.WriteLine(obj.Contents);
-                SaveTool.saveToFiles(obj);
             }
             return true;
         }
