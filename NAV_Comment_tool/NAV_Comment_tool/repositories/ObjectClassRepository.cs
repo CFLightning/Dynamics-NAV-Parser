@@ -11,10 +11,5 @@ namespace NAV_Comment_tool.repositories
         {
             objectRepository.Add(newObject);
         }
-
-        public static List<ObjectClass> fetchRepo()
-        {
-            return objectRepository;
-        }
     }
 }

@@ -13,26 +13,28 @@ namespace NAV_Comment_tool.indentationChecker
 
         public static void initTriggerList()
         {
-            triggers = new List<string>();
-            triggers.Add("OnInit");
-            triggers.Add("OnRun");
-            triggers.Add("OnOpen");
-            triggers.Add("OnClose");
-            triggers.Add("OnFind");
-            triggers.Add("OnNext");
-            triggers.Add("OnAfterGet");
-            triggers.Add("OnNew");
-            triggers.Add("OnInsert");
-            triggers.Add("OnModify");
-            triggers.Add("OnDelete");
-            triggers.Add("OnQueryClose");
-            triggers.Add("OnValidate");
-            triggers.Add("OnLookup");
-            triggers.Add("OnDrillDown");
-            triggers.Add("OnAssistEdit");
-            triggers.Add("OnControlAddin");
-            triggers.Add("OnAction");
-            triggers.Add("PROCEDURE");
+            triggers = new List<string>
+            {
+                "OnInit",
+                "OnRun",
+                "OnOpen",
+                "OnClose",
+                "OnFind",
+                "OnNext",
+                "OnAfterGet",
+                "OnNew",
+                "OnInsert",
+                "OnModify",
+                "OnDelete",
+                "OnQueryClose",
+                "OnValidate",
+                "OnLookup=",
+                "OnDrillDown",
+                "OnAssistEdit",
+                "OnControlAddin",
+                "OnAction",
+                "PROCEDURE"
+            };
         }
 
         public static bool checkIndentations()
@@ -93,10 +95,11 @@ namespace NAV_Comment_tool.indentationChecker
                 writer = new StringWriter(builder);
             }
 
-            foreach(ObjectClass obj in ObjectClassRepository.objectRepository)
-            {
-                Console.WriteLine(obj.Contents);
-            }
+            //foreach(ObjectClass obj in ObjectClassRepository.objectRepository)
+            //{
+            //    Console.WriteLine(obj.Contents);
+            //}
+
             return true;
         }
     }

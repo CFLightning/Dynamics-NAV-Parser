@@ -8,7 +8,7 @@ namespace NAV_Comment_tool.fileSplitter
 {
     class FileSplitter
     {
-        public static void splitFile(string path)
+        public static bool splitFile(string path)
         {
             StringBuilder builder = new StringBuilder();
             StringWriter sWriter = null; 
@@ -58,6 +58,7 @@ namespace NAV_Comment_tool.fileSplitter
                 if (sWriter != null)
                     sWriter.Close();
             }
+            return true;
         }
     }
 }
