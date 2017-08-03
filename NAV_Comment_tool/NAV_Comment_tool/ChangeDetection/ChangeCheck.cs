@@ -7,18 +7,11 @@ using System.Text.RegularExpressions;
 
 namespace NAV_Comment_tool.fileSplitter
 {
-    class ChangeCheck
+    public static class ChangeCheck
     {
-        string[] codeLines;
-
         enum Marks { BEGIN, END, OTHER };
 
-        public ChangeCheck(string[] lines)
-        {
-            codeLines = lines;
-        }
-
-        private Regex[] DefinePatterns()
+        static private Regex[] DefinePatterns()
         {
             string lineFrontComment = @" *// *";        // BEGIN,AND
             string lineBackComment = @".*\S+.\// *";    // OTHER
@@ -63,7 +56,7 @@ namespace NAV_Comment_tool.fileSplitter
             return rgx;
         }
 
-        private bool FindPattern(string text)
+        static private bool FindPattern(string text)
         {
             Regex[] rgx = DefinePatterns();
             if (rgx[(int)Marks.BEGIN].IsMatch(text))
@@ -89,7 +82,7 @@ namespace NAV_Comment_tool.fileSplitter
 
         }
 
-        public List<string> FindTags()
+        static private List<string> FindTags(string[] codeLines)
         {
             List<string> tagList = new List<string>();
             foreach (var line in codeLines)
@@ -105,7 +98,7 @@ namespace NAV_Comment_tool.fileSplitter
             return tagList;
         }
 
-        public List<string> FindModsInTags(List<string> tagList)
+        static private List<string> FindModsInTags(List<string> tagList)
         {
             Regex[] rgx = DefinePatterns();
             List<string> tagModList = new List<string>();
@@ -141,16 +134,16 @@ namespace NAV_Comment_tool.fileSplitter
                 }
             }
             
-            return tagModList;
+            return modList;
+        }
+
+        static public List<string> GetModyficationList(string[] lines)
+        {
+            return FindModsInTags(FindTags(lines));
         }
     }
 }
 
-
 //string path = @"C:\Users\Administrator\Documents\export\18cust.txt";
 //string[] objectTextLines = System.IO.File.ReadAllText(path).Replace("\r", "").Split('\n');
-//ChangeCheck chch = new ChangeCheck(objectTextLines);
-//chch.FindModsInTags(chch.FindTags()).ToArray();
-
-//Console.WriteLine(Environment.NewLine);
-//whatever
+//string[] txt = ChangeCheck.GetModyficationList(objectTextLines).ToArray();
