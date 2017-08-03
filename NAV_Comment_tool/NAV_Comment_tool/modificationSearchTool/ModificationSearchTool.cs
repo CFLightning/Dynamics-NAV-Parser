@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using NAV_Comment_tool.repositories;
 using NAV_Comment_tool.parserClass;
 using System.Linq;
+using NAV_Comment_tool.fileSplitter;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using NAV_Comment_tool.fileSplitter;
 
 namespace NAV_Comment_tool.modificationSearchTool
 {
@@ -16,31 +16,33 @@ namespace NAV_Comment_tool.modificationSearchTool
 
         public static void initTags(ObjectClass obj)
         {
+            //tags = new List<string>
+            //{
+            //    "231/"
+            //};
+
             tags = ChangeCheck.GetModyficationList(obj.Contents);
         }
 
         public static bool findAndSaveChanges()
         {
+            //initTags();
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 initTags(obj);
-
-                // Insert another foreach to go through the object by each tag alone, finding all changes needed
-                foreach (string flag in tags)
+                foreach (string modtag in tags) //Insert another foreach to go through the object by each tag alone, finding all changes needed
                 {
-                
                     StringReader reader = new StringReader(obj.Contents);
                     StringBuilder builder = new StringBuilder();
                     StringWriter writer = new StringWriter(builder);
-                    string line, currentFlag=null;
+                    string line, currentFlag = null, endFlag = ""; //MAYBE SUBJECT TO CHANGES
                     bool startFlag = false;
 
                     while (null != (line = reader.ReadLine()))
                     {
                         if (startFlag == true)
                         {
-
-                            if (line.Contains(currentFlag))
+                            if (line.Contains(currentFlag) && line.Contains(@"//") && line.Contains(endFlag)) //MAYBE SUBJECT TO CHANGES
                             {
                                 startFlag = false;
                                 if (builder.ToString() != "")
@@ -59,23 +61,27 @@ namespace NAV_Comment_tool.modificationSearchTool
                         }
                         else if (startFlag == false)
                         {
-                            if (ChangeCheck.CheckIfTagInLine(line) && flag == ChangeCheck.CheckTagedModyfication(line))
-                            {
-                                startFlag = true;
-                                currentFlag = ChangeCheck.CheckTagedModyfication(line);
-                            }
-                            else if (line.Contains(flag) && line.Contains("Description="))
-                            {
-                                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
-                            }
+                                if (line.Contains(modtag) && !(line.Contains("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//"))
+                                {
+                                    startFlag = true;
+                                    currentFlag = modtag;
+                                    if (line.Contains(modtag + " begin")) endFlag = (modtag + " end");
+                                    if (line.Contains(modtag + @"/S")) endFlag = (modtag + @"/E"); //MAYBE SUBJECT TO CHANGES
+                                    if (line.Contains(@"<--")) endFlag = "-->";
+                                }
+                                else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
+                                {
+                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
+                                }
                         }
                     }
                 }
+               
             }
 
             foreach(ChangeClass change in ChangeClassRepository.changeRepository)
             {
-                Console.WriteLine("THIS IS A NEW CHANGE");
+                Console.WriteLine("THIS IS A NEW CHANGE" + change.ChangelogCode);
                 Console.WriteLine(change.Contents);
             }
             return true;
