@@ -63,7 +63,7 @@ namespace NAV_Comment_tool.indentationChecker
                     }
                     if(triggerFlag == true && beginFlag == false)
                     {
-                        if (line.Contains("BEGIN"))
+                        if (line.Contains("BEGIN")) // " BEGIN ", endsWith(" BEGIN"), "=BEGIN"
                         {
                             beginFlag = true;
                             endsToGo++;
@@ -72,7 +72,7 @@ namespace NAV_Comment_tool.indentationChecker
                     }
                     if(triggerFlag == true && beginFlag == true)
                     {
-                        if (line.Contains("END"))
+                        if (line.Contains("END")) // " END ", endswith(" END"), " END;"
                         {
                             if(endsToGo==1)
                             {

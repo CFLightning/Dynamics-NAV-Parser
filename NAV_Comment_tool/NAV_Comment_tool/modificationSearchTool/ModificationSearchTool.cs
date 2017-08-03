@@ -30,52 +30,53 @@ namespace NAV_Comment_tool.modificationSearchTool
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 initTags(obj);
-                //foreach
-                // Insert another foreach to go through the object by each tag alone, finding all changes needed
-                StringReader reader = new StringReader(obj.Contents);
-                StringBuilder builder = new StringBuilder();
-                StringWriter writer = new StringWriter(builder);
-                string line, currentFlag=null;
-                bool startFlag = false;
-
-                while (null != (line = reader.ReadLine()))
+                foreach (string modtag in tags) //Insert another foreach to go through the object by each tag alone, finding all changes needed
                 {
-                    if (startFlag == true)
-                    {
-                        
-                        if (line.Contains(currentFlag) && line.Contains(@"//"))
-                        {
-                            startFlag = false;
-                            if (builder.ToString() != "")
-                            {
-                                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code"));
-                            }
+                    StringReader reader = new StringReader(obj.Contents);
+                    StringBuilder builder = new StringBuilder();
+                    StringWriter writer = new StringWriter(builder);
+                    string line, currentFlag = null, endFlag = ""; //MAYBE SUBJECT TO CHANGES
+                    bool startFlag = false;
 
-                            writer.Close();
-                            builder = new StringBuilder();
-                            writer = new StringWriter(builder);
-                        }
-                        else
-                        {
-                            writer.WriteLine(line);
-                        }
-                    }
-                    else if (startFlag == false && line.Contains(@"//"))
+                    while (null != (line = reader.ReadLine()))
                     {
-                        foreach (string flag in tags)
+                        if (startFlag == true)
                         {
-                            if (line.Contains(flag) && !(line.Contains("Description=")) && !(line.Contains("Version List=")))
+                            if (line.Contains(currentFlag) && line.Contains(@"//") && line.Contains(endFlag)) //MAYBE SUBJECT TO CHANGES
                             {
-                                startFlag = true;
-                                currentFlag = flag;
+                                startFlag = false;
+                                if (builder.ToString() != "")
+                                {
+                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code"));
+                                }
+
+                                writer.Close();
+                                builder = new StringBuilder();
+                                writer = new StringWriter(builder);
                             }
-                            else if(line.Contains(flag) && line.Contains("Description=") && !(line.Contains("Version List=")))
+                            else
                             {
-                                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
+                                writer.WriteLine(line);
                             }
+                        }
+                        else if (startFlag == false)
+                        {
+                                if (line.Contains(modtag) && !(line.Contains("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//"))
+                                {
+                                    startFlag = true;
+                                    currentFlag = modtag;
+                                    if (line.Contains(modtag + " begin")) endFlag = (modtag + " end");
+                                    if (line.Contains(modtag + @"/S")) endFlag = (modtag + @"/E"); //MAYBE SUBJECT TO CHANGES
+                                    if (line.Contains(@"<--")) endFlag = "-->";
+                                }
+                                else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
+                                {
+                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
+                                }
                         }
                     }
                 }
+               
             }
 
             foreach(ChangeClass change in ChangeClassRepository.changeRepository)
