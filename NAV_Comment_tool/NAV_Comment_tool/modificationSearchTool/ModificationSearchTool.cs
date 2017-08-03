@@ -26,6 +26,7 @@ namespace NAV_Comment_tool.modificationSearchTool
             initTags();
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
+                // Insert another foreach to go through the object by each tag alone, finding all changes needed
                 StringReader reader = new StringReader(obj.Contents);
                 StringBuilder builder = new StringBuilder();
                 StringWriter writer = new StringWriter(builder);
@@ -36,9 +37,18 @@ namespace NAV_Comment_tool.modificationSearchTool
                 {
                     if (startFlag == true)
                     {
+                        
                         if (line.Contains(currentFlag))
                         {
                             startFlag = false;
+                            if (builder.ToString() != "")
+                            {
+                                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code"));
+                            }
+
+                            writer.Close();
+                            builder = new StringBuilder();
+                            writer = new StringWriter(builder);
                         }
                         else
                         {
@@ -49,23 +59,23 @@ namespace NAV_Comment_tool.modificationSearchTool
                     {
                         foreach (string flag in tags)
                         {
-                            if (line.Contains(flag))
+                            if (line.Contains(flag) && !(line.Contains("Description=")))
                             {
                                 startFlag = true;
                                 currentFlag = flag;
                             }
+                            else if(line.Contains(flag) && line.Contains("Description="))
+                            {
+                                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
+                            }
                         }
                     }
                 }
-                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString()));
-
-                writer.Close();
-                builder = new StringBuilder();
-                writer = new StringWriter(builder);
             }
 
             foreach(ChangeClass change in ChangeClassRepository.changeRepository)
             {
+                Console.WriteLine("THIS IS A NEW CHANGE");
                 Console.WriteLine(change.Contents);
             }
             return true;
