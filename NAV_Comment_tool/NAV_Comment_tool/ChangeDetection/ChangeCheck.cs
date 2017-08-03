@@ -13,7 +13,7 @@ namespace NAV_Comment_tool.fileSplitter
 
         static private Regex[] DefinePatterns()
         {
-            string lineFrontComment = @" *// *";        // BEGIN,AND
+            string lineFrontComment = @" *// *";        // BEGIN,AND // brak  koment////
             string lineBackComment = @".*\S+.\// *";    // OTHER
 
             List<string> beginPatternParts = new List<string>();
@@ -56,30 +56,17 @@ namespace NAV_Comment_tool.fileSplitter
             return rgx;
         }
 
-        static private bool FindPattern(string text)
+        static public bool CheckIfTagInLine(string text)
         {
             Regex[] rgx = DefinePatterns();
             if (rgx[(int)Marks.BEGIN].IsMatch(text))
-            {
-                //Console.WriteLine("BEGIN\t" + text);
                 return true;
-            }
             else if (rgx[(int)Marks.END].IsMatch(text))
-            {
-                //Console.WriteLine("END\t" + text);
                 return true;
-            }
             else if (rgx[(int)Marks.OTHER].IsMatch(text))
-            {
-               // Console.WriteLine("OTHER\t" + text);
                 return true;
-            }
             else
-            {
-                //Console.WriteLine("\t" + text);
                 return false;
-            }
-
         }
 
         static private List<string> FindTags(string[] codeLines)
@@ -89,7 +76,7 @@ namespace NAV_Comment_tool.fileSplitter
             {
                 if (line.Contains("//"))
                 {
-                    if (FindPattern(line))
+                    if (CheckIfTagInLine(line))
                     {
                         tagList.Add(line);
                     }
@@ -109,18 +96,19 @@ namespace NAV_Comment_tool.fileSplitter
                 if (rgx[(int)Marks.BEGIN].IsMatch(tag))
                 {
                     match = rgx[(int)Marks.BEGIN].Match(tag);
-                    //Console.WriteLine(Marks.BEGIN + "\t" + match.Groups["mod"].Value + "\t" + tag);
+                    Console.WriteLine(Marks.BEGIN + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
                 else if (rgx[(int)Marks.END].IsMatch(tag))
                 {
                     match = rgx[(int)Marks.END].Match(tag);
-                    //Console.WriteLine(Marks.END + "\t" + match.Groups["mod"].Value + "\t" + tag);
+                    Console.WriteLine(Marks.END + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
                 else if (rgx[(int)Marks.OTHER].IsMatch(tag))
                 {
                     match = rgx[(int)Marks.OTHER].Match(tag);
-                    //Console.WriteLine(Marks.OTHER + "\t" + match.Groups["mod"].Value + "\t" + tag);
+                    Console.WriteLine(Marks.OTHER + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
+
                 tagModList.Add(match.Groups["mod"].Value);
             }
 
@@ -137,6 +125,25 @@ namespace NAV_Comment_tool.fileSplitter
             return modList;
         }
 
+        static public string CheckTagedModyfication(string codeLine)
+        {
+            Regex[] rgx = DefinePatterns();
+
+            if (rgx[(int)Marks.BEGIN].IsMatch(codeLine))
+            {
+                return rgx[(int)Marks.BEGIN].Match(codeLine).Groups["mod"].Value;
+            }
+            else if (rgx[(int)Marks.END].IsMatch(codeLine))
+            {
+                return rgx[(int)Marks.END].Match(codeLine).Groups["mod"].Value;
+            }
+            else if (rgx[(int)Marks.OTHER].IsMatch(codeLine))
+            {
+                return rgx[(int)Marks.OTHER].Match(codeLine).Groups["mod"].Value;
+            }
+            return "";
+        }
+
         static public List<string> GetModyficationList(string code)
         {
             string[] codeLines = code.Replace("\r", "").Split('\n');
@@ -148,6 +155,7 @@ namespace NAV_Comment_tool.fileSplitter
             string[] codeLines = code.Replace("\r", "").Split('\n');
             return FindTags(codeLines);
         }
+
     }
 }
 

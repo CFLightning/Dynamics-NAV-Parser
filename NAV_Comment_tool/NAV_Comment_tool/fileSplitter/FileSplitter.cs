@@ -21,7 +21,7 @@ namespace NAV_Comment_tool.fileSplitter
                     string line;
                     while((line = inputfile.ReadLine()) != null)
                     {
-                        if (sWriter == null || line.Contains("OBJECT ") || inputfile.EndOfStream)
+                        if (sWriter == null || line.StartsWith("OBJECT ") || inputfile.EndOfStream)
                         {
                             if(sWriter != null)
                             {
@@ -38,7 +38,7 @@ namespace NAV_Comment_tool.fileSplitter
                             sWriter = new StringWriter(builder);
                         }
 
-                        if (line.Contains("OBJECT "))
+                        if (line.StartsWith("OBJECT "))
                         {
                             name = "";
                             string[] parameters = line.Split(' ');

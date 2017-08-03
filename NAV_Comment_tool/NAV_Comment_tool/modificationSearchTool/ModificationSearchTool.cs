@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using NAV_Comment_tool.fileSplitter;
 
 namespace NAV_Comment_tool.modificationSearchTool
 {
@@ -13,58 +14,57 @@ namespace NAV_Comment_tool.modificationSearchTool
     {
         private static List<string> tags;
 
-        public static void initTags()
+        public static void initTags(ObjectClass obj)
         {
-            tags = new List<string>
-            {
-                "231/"
-            };
+            tags = ChangeCheck.GetModyficationList(obj.Contents);
         }
 
         public static bool findAndSaveChanges()
         {
-            initTags();
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
+                initTags(obj);
+
                 // Insert another foreach to go through the object by each tag alone, finding all changes needed
-                StringReader reader = new StringReader(obj.Contents);
-                StringBuilder builder = new StringBuilder();
-                StringWriter writer = new StringWriter(builder);
-                string line, currentFlag=null;
-                bool startFlag = false;
-
-                while (null != (line = reader.ReadLine()))
+                foreach (string flag in tags)
                 {
-                    if (startFlag == true)
-                    {
-                        
-                        if (line.Contains(currentFlag))
-                        {
-                            startFlag = false;
-                            if (builder.ToString() != "")
-                            {
-                                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code"));
-                            }
+                
+                    StringReader reader = new StringReader(obj.Contents);
+                    StringBuilder builder = new StringBuilder();
+                    StringWriter writer = new StringWriter(builder);
+                    string line, currentFlag=null;
+                    bool startFlag = false;
 
-                            writer.Close();
-                            builder = new StringBuilder();
-                            writer = new StringWriter(builder);
-                        }
-                        else
-                        {
-                            writer.WriteLine(line);
-                        }
-                    }
-                    else if (startFlag == false)
+                    while (null != (line = reader.ReadLine()))
                     {
-                        foreach (string flag in tags)
+                        if (startFlag == true)
                         {
-                            if (line.Contains(flag) && !(line.Contains("Description=")))
+
+                            if (line.Contains(currentFlag))
+                            {
+                                startFlag = false;
+                                if (builder.ToString() != "")
+                                {
+                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code"));
+                                }
+
+                                writer.Close();
+                                builder = new StringBuilder();
+                                writer = new StringWriter(builder);
+                            }
+                            else
+                            {
+                                writer.WriteLine(line);
+                            }
+                        }
+                        else if (startFlag == false)
+                        {
+                            if (ChangeCheck.CheckIfTagInLine(line) && flag == ChangeCheck.CheckTagedModyfication(line))
                             {
                                 startFlag = true;
-                                currentFlag = flag;
+                                currentFlag = ChangeCheck.CheckTagedModyfication(line);
                             }
-                            else if(line.Contains(flag) && line.Contains("Description="))
+                            else if (line.Contains(flag) && line.Contains("Description="))
                             {
                                 ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
                             }

@@ -8,7 +8,6 @@ namespace NAV_Comment_tool.fileSplitter
 {
     class ExtractObjectParts
     {
-        private string objectText;
         private string[] objectTextLines;
 
         string[] part_objectProperties;
@@ -34,14 +33,19 @@ namespace NAV_Comment_tool.fileSplitter
             //FindPropertiesTriggers();
         }
 
+        public List<string> GetVersionList()
+        {
+            return versionList;
+        }
+
         public void LoadFile(string path)
         {
-            objectText = System.IO.File.ReadAllText(path);
+            string objectText = System.IO.File.ReadAllText(path);
             objectTextLines = objectText.Replace("\r", "").Split('\n');
         }
 
 
-        public void FillTitleInfo()
+        private void FillTitleInfo()
         {
             string line = objectTextLines[0];
             string[] titleElements = line.Split();
@@ -52,48 +56,47 @@ namespace NAV_Comment_tool.fileSplitter
                 title_name += " " + titleElements[i];
         }
 
-        public void ExtractParts()
+        private void ExtractParts()
         {
             List<string> tempPartLines = new List<string>();
-            string[] lines = objectText.Replace("\r", "").Split('\n');
             int i = 1;
             do
             {
                 ;
-            } while (lines[++i] != "  OBJECT-PROPERTIES");
+            } while (objectTextLines[++i] != "  OBJECT-PROPERTIES");
             do
             {
-                tempPartLines.Add(lines[i]);
-            } while (lines[++i] != "  PROPERTIES");
+                tempPartLines.Add(objectTextLines[i]);
+            } while (objectTextLines[++i] != "  PROPERTIES");
             part_objectProperties = tempPartLines.ToArray();
             tempPartLines.Clear();
             do
             {
-                tempPartLines.Add(lines[i]);
-            } while (lines[++i] != "  FIELDS");
+                tempPartLines.Add(objectTextLines[i]);
+            } while (objectTextLines[++i] != "  FIELDS");
             part_properties = tempPartLines.ToArray();
             tempPartLines.Clear();
             do
             {
-                tempPartLines.Add(lines[i]);
-            } while (lines[++i] != "  KEYS");
+                tempPartLines.Add(objectTextLines[i]);
+            } while (objectTextLines[++i] != "  KEYS");
             part_fields = tempPartLines.ToArray();
             tempPartLines.Clear();
             do
             {
-                tempPartLines.Add(lines[i]);
-            } while (lines[++i] != "  FIELDGROUPS");
+                tempPartLines.Add(objectTextLines[i]);
+            } while (objectTextLines[++i] != "  FIELDGROUPS");
             part_keys = tempPartLines.ToArray();
             do
             {
-                tempPartLines.Add(lines[i]);
-            } while (lines[++i] != "  CODE");
+                tempPartLines.Add(objectTextLines[i]);
+            } while (objectTextLines[++i] != "  CODE");
             part_fieldgroups = tempPartLines.ToArray();
             tempPartLines.Clear();
             do
             {
-                tempPartLines.Add(lines[i]);
-            } while (++i != lines.Length);
+                tempPartLines.Add(objectTextLines[i]);
+            } while (++i != objectTextLines.Length);
             part_code = tempPartLines.ToArray();
             tempPartLines.Clear();
 
