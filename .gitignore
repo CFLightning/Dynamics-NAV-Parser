@@ -296,3 +296,6 @@ NAV_Comment_tool/NAV_Comment_tool/TEMP/*
 
 # BizTalk build output
 *.btp.cs
+
+# Ignore Program.cs
+NAV_Comment_tool/NAV_Comment_tool/Program.cs
