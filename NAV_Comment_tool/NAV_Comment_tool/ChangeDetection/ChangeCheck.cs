@@ -137,9 +137,16 @@ namespace NAV_Comment_tool.fileSplitter
             return modList;
         }
 
-        static public List<string> GetModyficationList(string[] lines)
+        static public List<string> GetModyficationList(string code)
         {
-            return FindModsInTags(FindTags(lines));
+            string[] codeLines = code.Replace("\r", "").Split('\n');
+            return FindModsInTags(FindTags(codeLines));
+        }
+
+        static public List<string> GetTagList(string code)
+        {
+            string[] codeLines = code.Replace("\r", "").Split('\n');
+            return FindTags(codeLines);
         }
     }
 }
