@@ -23,58 +23,13 @@ namespace NAV_Comment_tool.fileSplitter
 
         enum Marks { BEGIN, END, OTHER };
 
-        static private Regex[] DefinePatterns()
-        {
-            string lineFrontComment = @" *// *";        // BEGIN,AND // brak  koment////
-            string lineBackComment = @".*(\S^(//))+.// *";    // OTHER
-
-            List<string> beginPatternParts = new List<string>();
-            beginPatternParts.Add(@"<-+ *(IT/)?(?<mod>[A-Z0-9\.]+)");
-            beginPatternParts.Add(@"-+< *(IT/)?(?<mod>[A-Z0-9\.]+)");
-            beginPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) *begin");
-            beginPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) */S");
-            //beginPatternParts.Add...
-            string beginPattern = "(" + lineFrontComment + beginPatternParts[0] + ")";
-            for (int i = 1; i < beginPatternParts.Count; i++)
-                beginPattern += "|(" + lineFrontComment + beginPatternParts[i] + ")";
-            
-            List<string> endPatternParts = new List<string>();
-            endPatternParts.Add(@">-+ *(IT/)?(?<mod>[A-Z0-9\.]+)");
-            endPatternParts.Add(@"-+> *(IT/)?(?<mod>[A-Z0-9\.]+)");
-            endPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) *end");
-            endPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) */E");
-            //endPatternParts.Add...
-            string endPattern = "(" + lineFrontComment + endPatternParts[0] + ")";
-            for (int i = 1; i < endPatternParts.Count; i++)
-                endPattern += "|(" + lineFrontComment + endPatternParts[i] + ")";
-
-            List<string> otherPatternParts = new List<string>();
-            //otherPatternParts.Add(@"[0-9]{2}\.[0-9]{2}\.[0-9]{4}");
-            otherPatternParts.Add(@"(?<mod>[A-Z0-9\.]+)");
-            //otherPatternParts.Add...
-            string otherPattern = "(" + lineBackComment + otherPatternParts[0] + ")";
-            for (int i = 1; i < otherPatternParts.Count; i++)
-                otherPattern += "|(" + lineBackComment + otherPatternParts[i] + ")";
-
-
-            Regex rgxBegin = new Regex(beginPattern);
-            Regex rgxEnd = new Regex(endPattern);
-            Regex rgxOther = new Regex(otherPattern);
-
-            Regex[] rgx = new Regex[3];
-            rgx[(int)Marks.BEGIN] = rgxBegin;
-            rgx[(int)Marks.END] = rgxEnd;
-            rgx[(int)Marks.OTHER] = rgxOther;
-            return rgx;
-        }
-        
         static private Regex[] DefinePatternsNEW()
         {
-            string lineFrontComment = @" *// *";        // BEGIN,AND // brak  koment////
-            string lineBackComment = @".*(\S^(//))+.// *";    // OTHER
+            string lineFrontComment = @" *// *";        // BEGIN,AND // brak  koment//// .*(\S^(//))
+            string lineBackComment = @" *[^\s/{2}]+.*// *";    // OTHER .*\S+.\
 
             List<Regex[]> PatternList = new List<Regex[]>();
-
+            
             List<string> beginPatternParts = new List<string>();
             beginPatternParts.Add(@"<-+ *(IT/)?" + modNo + @"($| )");
             //beginPatternParts.Add(@"-+< *(IT/)?" + modNo);
