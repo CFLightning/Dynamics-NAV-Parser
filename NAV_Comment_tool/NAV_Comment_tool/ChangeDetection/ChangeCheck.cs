@@ -19,7 +19,7 @@ namespace NAV_Comment_tool.fileSplitter
             List<string> beginPatternParts = new List<string>();
             beginPatternParts.Add(@"<-+ *(IT/)?(?<mod>[A-Z0-9\.]+)");
             beginPatternParts.Add(@"-+< *(IT/)?(?<mod>[A-Z0-9\.]+)");
-            beginPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) *begin");
+            beginPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) *begin"); //VARIABLE
             beginPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) */S");
             //beginPatternParts.Add...
             string beginPattern = "(" + lineFrontComment + beginPatternParts[0] + ")";

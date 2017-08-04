@@ -17,21 +17,15 @@ namespace NAV_Comment_tool.modificationSearchTool
 
         public static void initTags(ObjectClass obj)
         {
-            //tags = new List<string>
-            //{
-            //    "231/"
-            //};
-
             tags = ChangeCheck.GetModyficationList(obj.Contents);
         }
 
         public static bool findAndSaveChanges()
         {
-            //initTags();
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 initTags(obj);
-                foreach (string modtag in tags) //Insert another foreach to go through the object by each tag alone, finding all changes needed
+                foreach (string modtag in tags) 
                 {
                     StringReader reader = new StringReader(obj.Contents);
                     StringBuilder builder = new StringBuilder();
@@ -66,35 +60,26 @@ namespace NAV_Comment_tool.modificationSearchTool
                             if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//"))
                             {
                                 currentFlag = modtag;
-                                if (new Regex("<-+ *(IT/)?" + modtag).IsMatch(line))
+                                if (new Regex("<-- *(IT/)?" + modtag + @"\s").IsMatch(line))
                                 {
                                     startFlag = true;
-                                    endFlag = new Regex(@">-+ *(IT/)?" + modtag);
-                                }
-                                else if (new Regex("-+< *(IT/)?" + modtag).IsMatch(line))
-                                {
-                                    startFlag = true;
-                                    endFlag = new Regex(@"-+> *(IT/)?" + modtag);
+                                    endFlag = new Regex(@"--> *(IT/)?" + modtag + @"\s");
                                 }
                                 else if (new Regex("(IT/)?" + modtag + " *begin").IsMatch(line))
                                 {
                                     startFlag = true;
                                     endFlag = new Regex(@"(IT/)?" + modtag + " *end");
                                 }
-                                else if (new Regex(@"(IT/)?" + modtag + " */S").IsMatch(line))
+                                else if (new Regex(@"(IT/)?" + modtag + " */S").IsMatch(line)) // IT/FX01/S - IT/S
                                 {
                                     startFlag = true;
                                     endFlag = new Regex(@"(IT/)?" + modtag + " */E");
                                 }
-
-
-                                //if (line.Contains(modtag + @"/S")) endFlag = (modtag + @"/E"); //MAYBE SUBJECT TO CHANGES
-                                //if (line.Contains(@"<--")) endFlag = "-->";
-                                }
-                                else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
-                                {
-                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
-                                }
+                            }
+                            else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
+                            {
+                                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
+                            }
                         }
                     }
                 }
@@ -103,8 +88,12 @@ namespace NAV_Comment_tool.modificationSearchTool
 
             foreach(ChangeClass change in ChangeClassRepository.changeRepository)
             {
-                Console.WriteLine("THIS IS A NEW CHANGE" + change.ChangelogCode);
-                Console.WriteLine(change.Contents);
+                if(change.ChangeType != "Field")
+                {
+                    Console.WriteLine("THIS IS A NEW CHANGE" + change.ChangelogCode);
+                    Console.WriteLine(change.Contents);
+                }
+                
             }
             return true;
         }

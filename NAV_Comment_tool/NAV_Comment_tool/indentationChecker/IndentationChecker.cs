@@ -95,8 +95,8 @@ namespace NAV_Comment_tool.indentationChecker
                             line = indenter + line.TrimStart(' '); 
                         }
                     }
-                    Console.WriteLine(currentIndentation);
-                    Console.WriteLine(line); // CHECKING COMMANDS
+                    //Console.WriteLine(currentIndentation);
+                    //Console.WriteLine(line); // CHECKING COMMANDS
                     writer.WriteLine(line);
                 }
                 obj.Contents = builder.ToString();
