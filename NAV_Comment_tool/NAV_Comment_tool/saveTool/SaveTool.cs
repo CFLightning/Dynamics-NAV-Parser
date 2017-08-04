@@ -7,14 +7,17 @@ namespace NAV_Comment_tool.saveTool
 {
     class SaveTool
     {
-        public static bool saveToFiles(string path)
+        public static bool saveObjectsToFiles(string path)
         {
-            foreach(ObjectClass obj in ObjectClassRepository.objectRepository)
+            foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 File.WriteAllText(path + obj.Type + " " + obj.Number + " " + obj.Name + " .txt", obj.Contents);
             }
-
-            foreach(ChangeClass chg in ChangeClassRepository.changeRepository)
+            return true;
+        }
+        public static bool saveChangesToFiles(string path)
+        {
+                foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {
                 if(chg.ChangeType != "Field")
                 {
