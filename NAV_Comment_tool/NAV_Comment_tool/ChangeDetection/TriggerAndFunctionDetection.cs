@@ -36,16 +36,23 @@ namespace NAV_Comment_tool.ChangeDetection
             };
         }
 
-        static public bool DetectIfTriggerInLine(string line)
+        static public bool DetectIfAnyTriggerInLine(string line)
         {
-            line = line.Trim(' ');
             foreach (var trigger in triggers)
             {
-                //if (line.StartsWith(trigger) && (line.EndsWith("=BEGIN") || line.EndsWith("=VAR")))
-                if (line == trigger + "=VAR" || line == trigger + "=BEGIN")
-                    {
+                if (DetectIfSpecifiedTriggerInLine(trigger, line))
                     return true;
-                }
+            }
+            return false;
+        }
+
+        static public bool DetectIfSpecifiedTriggerInLine(string trigger, string line)
+        {
+            line = line.Trim(' ');
+            //if (line.StartsWith(trigger) && (line.EndsWith("=BEGIN") || line.EndsWith("=VAR")))
+            if (line == trigger + "=VAR" || line == trigger + "=BEGIN")
+            {
+                return true;
             }
             return false;
         }
@@ -54,7 +61,7 @@ namespace NAV_Comment_tool.ChangeDetection
         {
             foreach (var trigger in triggers)
             {
-                if (DetectIfTriggerInLine(triggerLine))
+                if (DetectIfSpecifiedTriggerInLine(trigger, triggerLine))
                 {
                     return trigger;
                 }
