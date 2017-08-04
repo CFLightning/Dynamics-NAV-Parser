@@ -13,6 +13,7 @@ namespace NAV_Comment_tool
             FileSplitter.splitFile(path + "Objects.txt"); // TODO: Change hardcoded path to dynamically chosen one
             IndentationChecker.checkIndentations();
             ModificationSearchTool.findAndSaveChanges();
+            ModificationCleanerTool.cleanChangeCode();
             SaveTool.saveToFiles(path);
             //string path = @"C:\Users\Administrator\Documents\export\18cust.txt";
             //string objectTextLines = System.IO.File.ReadAllText(path);

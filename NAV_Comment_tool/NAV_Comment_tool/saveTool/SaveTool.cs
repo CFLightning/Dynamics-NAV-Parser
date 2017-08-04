@@ -1,5 +1,6 @@
 ﻿using NAV_Comment_tool.parserClass;
 using NAV_Comment_tool.repositories;
+using System;
 using System.IO;
 
 namespace NAV_Comment_tool.saveTool
@@ -15,8 +16,11 @@ namespace NAV_Comment_tool.saveTool
 
             foreach(ChangeClass chg in ChangeClassRepository.changeRepository)
             {
-                File.AppendAllText(path + chg.ChangelogCode + " .txt", chg.Contents);
-                File.AppendAllText(path + chg.ChangelogCode + " .txt", "\n\n\n");
+                if(chg.ChangeType != "Field")
+                {
+                    File.AppendAllText(path + chg.ChangelogCode + " .txt", chg.Contents);
+                    File.AppendAllText(path + chg.ChangelogCode + " .txt", Environment.NewLine + Environment.NewLine);
+                }
             }
             return true;
         }
