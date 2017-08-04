@@ -45,7 +45,7 @@ namespace NAV_Comment_tool.indentationChecker
                 StringReader reader = new StringReader(obj.Contents);
                 StringBuilder builder = new StringBuilder();
                 StringWriter writer = new StringWriter(builder);
-                string line;
+                string line, check = "";
                 bool triggerFlag = false, beginFlag = false;
                 int currentIndentation = 0, endsToGo = 0;
 
@@ -55,11 +55,12 @@ namespace NAV_Comment_tool.indentationChecker
                     {
                         foreach (string flag in triggers)
                         {
-                            if (line.Contains(flag) && !(line.Contains("=BEGIN")))
+                            check = line.Trim(' '); // Diffrent variable to forbid the program from indenting Trigger=BEGIN lines
+                            if (check.StartsWith(flag) && !(line.EndsWith("=BEGIN")))
                             {
                                 triggerFlag = true;
                             }
-                            else if (line.Contains(flag) && line.Contains("=BEGIN"))
+                            else if (check.StartsWith(flag) && line.EndsWith("=BEGIN")) // line.Contains(flag) 
                             {
                                 triggerFlag = true;
                                 beginFlag = true;
@@ -88,14 +89,14 @@ namespace NAV_Comment_tool.indentationChecker
                             }
                             endsToGo--;
                         }
-                        if ( ((line.Length - line.TrimStart(' ').Length) < currentIndentation) && triggerFlag == true && beginFlag == true ) // && !(line.Contains("BEGIN")
+                        if ( ((line.Length - line.TrimStart(' ').Length) < currentIndentation) && triggerFlag == true && beginFlag == true && !(line.Contains(check))) // && !(line.Contains("BEGIN")
                         {
                             string indenter = string.Empty.PadLeft(currentIndentation);
                             line = indenter + line.TrimStart(' '); 
                         }
                     }
-                    // Console.WriteLine(currentIndentation);
-                    // Console.WriteLine(line); // CHECKING COMMANDS
+                    Console.WriteLine(currentIndentation);
+                    Console.WriteLine(line); // CHECKING COMMANDS
                     writer.WriteLine(line);
                 }
                 obj.Contents = builder.ToString();
