@@ -9,6 +9,18 @@ namespace NAV_Comment_tool.fileSplitter
 {
     public static class ChangeCheck
     {
+        static Regex[] tagPatterns;
+        static List<Regex[]> tagPairPattern;
+        static string modNo;
+
+        static ChangeCheck()
+        {
+            modNo = @"(?<mod>[A-Z0-9\.]+)";
+            tagPatterns = new Regex[3];
+            tagPairPattern = new List<Regex[]>();
+            DefinePatternsNEW();
+        }
+
         enum Marks { BEGIN, END, OTHER };
 
         static private Regex[] DefinePatterns()
@@ -19,7 +31,7 @@ namespace NAV_Comment_tool.fileSplitter
             List<string> beginPatternParts = new List<string>();
             beginPatternParts.Add(@"<-+ *(IT/)?(?<mod>[A-Z0-9\.]+)");
             beginPatternParts.Add(@"-+< *(IT/)?(?<mod>[A-Z0-9\.]+)");
-            beginPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) *begin"); //VARIABLE
+            beginPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) *begin");
             beginPatternParts.Add(@"(IT/)?(?<mod>[A-Z0-9\.]+) */S");
             //beginPatternParts.Add...
             string beginPattern = "(" + lineFrontComment + beginPatternParts[0] + ")";
@@ -55,15 +67,88 @@ namespace NAV_Comment_tool.fileSplitter
             rgx[(int)Marks.OTHER] = rgxOther;
             return rgx;
         }
+        
+        static private Regex[] DefinePatternsNEW()
+        {
+            string lineFrontComment = @" *// *";        // BEGIN,AND // brak  koment////
+            string lineBackComment = @".*\S+.\// *";    // OTHER
+
+            List<Regex[]> PatternList = new List<Regex[]>();
+
+            List<string> beginPatternParts = new List<string>();
+            beginPatternParts.Add(@"<-+ *(IT/)?" + modNo);
+            beginPatternParts.Add(@"-+< *(IT/)?" + modNo);
+            beginPatternParts.Add(@"(IT/)?" + modNo + " *begin");
+            beginPatternParts.Add(@"(IT/)?" + modNo + " */S");
+
+            List<string> endPatternParts = new List<string>();
+            endPatternParts.Add(@">-+ *(IT/)?" + modNo + "");
+            endPatternParts.Add(@"-+> *(IT/)?" + modNo + "");
+            endPatternParts.Add(@"(IT/)?" + modNo + " *end");
+            endPatternParts.Add(@"(IT/)?" + modNo + " */E");
+
+            List<string> otherPatternParts = new List<string>();
+            otherPatternParts.Add(@"" + modNo + "");
+
+            Regex rgxBegin, rgxEnd, rgxOther;
+            Regex[] rgxPair;
+
+            if (beginPatternParts.Count == endPatternParts.Count)
+                for (int i = 0; i < beginPatternParts.Count; i++)
+                {
+                    rgxBegin = new Regex(lineFrontComment + beginPatternParts[i]);
+                    rgxEnd = new Regex(lineFrontComment + endPatternParts[i]);
+                    rgxPair = new Regex[2];
+                    rgxPair[(int)Marks.BEGIN] = rgxBegin;
+                    rgxPair[(int)Marks.END] = rgxEnd;
+                    tagPairPattern.Add(rgxPair);
+                }
+
+            string endPattern = "(" + lineFrontComment + endPatternParts[0] + ")";
+            for (int i = 1; i < endPatternParts.Count; i++)
+                endPattern += "|(" + lineFrontComment + endPatternParts[i] + ")";
+
+            string beginPattern = "(" + lineFrontComment + beginPatternParts[0] + ")";
+            for (int i = 1; i < beginPatternParts.Count; i++)
+                beginPattern += "|(" + lineFrontComment + beginPatternParts[i] + ")";
+
+            string otherPattern = "(" + lineBackComment + otherPatternParts[0] + ")";
+            for (int i = 1; i < otherPatternParts.Count; i++)
+                otherPattern += "|(" + lineBackComment + otherPatternParts[i] + ")";
+
+            rgxBegin = new Regex(beginPattern);
+            rgxEnd = new Regex(endPattern);
+            rgxOther = new Regex(otherPattern);
+            
+            tagPatterns[(int)Marks.BEGIN] = rgxBegin;
+            tagPatterns[(int)Marks.END] = rgxEnd;
+            tagPatterns[(int)Marks.OTHER] = rgxOther;
+
+            return tagPatterns;
+        }
+
+        static public Regex GetFittingEndPattern(string codeLine)
+        {
+            foreach (var patternPair in tagPairPattern)
+            {
+                if (patternPair[(int)Marks.BEGIN].IsMatch(codeLine))
+                {
+                    string patternString = patternPair[(int)Marks.END].ToString();
+                    string mod = GetTagedModyfication(codeLine);
+                    patternString = patternString.Replace(modNo, mod);
+                    return new Regex(patternString);
+                }
+            }
+            return new Regex(@"");
+        }
 
         static public bool CheckIfTagInLine(string text)
         {
-            Regex[] rgx = DefinePatterns();
-            if (rgx[(int)Marks.BEGIN].IsMatch(text))
+            if (tagPatterns[(int)Marks.BEGIN].IsMatch(text))
                 return true;
-            else if (rgx[(int)Marks.END].IsMatch(text))
+            else if (tagPatterns[(int)Marks.END].IsMatch(text))
                 return true;
-            else if (rgx[(int)Marks.OTHER].IsMatch(text))
+            else if (tagPatterns[(int)Marks.OTHER].IsMatch(text))
                 return true;
             else
                 return false;
@@ -87,25 +172,24 @@ namespace NAV_Comment_tool.fileSplitter
 
         static private List<string> FindModsInTags(List<string> tagList)
         {
-            Regex[] rgx = DefinePatterns();
             List<string> tagModList = new List<string>();
             Match match = null;
 
             foreach (var tag in tagList)
             {
-                if (rgx[(int)Marks.BEGIN].IsMatch(tag))
+                if (tagPatterns[(int)Marks.BEGIN].IsMatch(tag))
                 {
-                    match = rgx[(int)Marks.BEGIN].Match(tag);
+                    match = tagPatterns[(int)Marks.BEGIN].Match(tag);
                     Console.WriteLine(Marks.BEGIN + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
-                else if (rgx[(int)Marks.END].IsMatch(tag))
+                else if (tagPatterns[(int)Marks.END].IsMatch(tag))
                 {
-                    match = rgx[(int)Marks.END].Match(tag);
+                    match = tagPatterns[(int)Marks.END].Match(tag);
                     Console.WriteLine(Marks.END + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
-                else if (rgx[(int)Marks.OTHER].IsMatch(tag))
+                else if (tagPatterns[(int)Marks.OTHER].IsMatch(tag))
                 {
-                    match = rgx[(int)Marks.OTHER].Match(tag);
+                    match = tagPatterns[(int)Marks.OTHER].Match(tag);
                     Console.WriteLine(Marks.OTHER + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
 
@@ -125,21 +209,19 @@ namespace NAV_Comment_tool.fileSplitter
             return modList;
         }
 
-        static public string CheckTagedModyfication(string codeLine)
+        static public string GetTagedModyfication(string tagLine)
         {
-            Regex[] rgx = DefinePatterns();
-
-            if (rgx[(int)Marks.BEGIN].IsMatch(codeLine))
+            if (tagPatterns[(int)Marks.BEGIN].IsMatch(tagLine))
             {
-                return rgx[(int)Marks.BEGIN].Match(codeLine).Groups["mod"].Value;
+                return tagPatterns[(int)Marks.BEGIN].Match(tagLine).Groups["mod"].Value;
             }
-            else if (rgx[(int)Marks.END].IsMatch(codeLine))
+            else if (tagPatterns[(int)Marks.END].IsMatch(tagLine))
             {
-                return rgx[(int)Marks.END].Match(codeLine).Groups["mod"].Value;
+                return tagPatterns[(int)Marks.END].Match(tagLine).Groups["mod"].Value;
             }
-            else if (rgx[(int)Marks.OTHER].IsMatch(codeLine))
+            else if (tagPatterns[(int)Marks.OTHER].IsMatch(tagLine))
             {
-                return rgx[(int)Marks.OTHER].Match(codeLine).Groups["mod"].Value;
+                return tagPatterns[(int)Marks.OTHER].Match(tagLine).Groups["mod"].Value;
             }
             return "";
         }
