@@ -55,15 +55,22 @@ namespace NAV_Comment_tool.indentationChecker
                     {
                         foreach (string flag in triggers)
                         {
-                            if (line.Contains(flag))
+                            if (line.Contains(flag) && !(line.Contains("=BEGIN")))
                             {
                                 triggerFlag = true;
+                            }
+                            else if (line.Contains(flag) && line.Contains("=BEGIN"))
+                            {
+                                triggerFlag = true;
+                                beginFlag = true;
+                                endsToGo++;
+                                currentIndentation = line.IndexOf("BEGIN") + 2;
                             }
                         }
                     }
                     if(triggerFlag == true && beginFlag == false)
                     {
-                        if (line.Contains("BEGIN")) // " BEGIN ", endsWith(" BEGIN"), "=BEGIN"
+                        if (line.Contains(" BEGIN ") || line.EndsWith(" BEGIN")) // || line.Contains("=BEGIN")
                         {
                             beginFlag = true;
                             endsToGo++;
@@ -72,7 +79,7 @@ namespace NAV_Comment_tool.indentationChecker
                     }
                     if(triggerFlag == true && beginFlag == true)
                     {
-                        if (line.Contains("END")) // " END ", endswith(" END"), " END;"
+                        if (line.Contains(" END ") || line.Contains(" END;") || line.EndsWith(" END")) 
                         {
                             if(endsToGo==1)
                             {
@@ -81,11 +88,14 @@ namespace NAV_Comment_tool.indentationChecker
                             }
                             endsToGo--;
                         }
-                        if ( ((line.Length - line.TrimStart(' ').Length) < currentIndentation) && triggerFlag == true && beginFlag == true && !(line.Contains("BEGIN")))
+                        if ( ((line.Length - line.TrimStart(' ').Length) < currentIndentation) && triggerFlag == true && beginFlag == true ) // && !(line.Contains("BEGIN")
                         {
-                            line = new string(' ', (line.Length - line.TrimStart(' ').Length)+2) + line;
+                            string indenter = string.Empty.PadLeft(currentIndentation);
+                            line = indenter + line.TrimStart(' '); 
                         }
                     }
+                    // Console.WriteLine(currentIndentation);
+                    // Console.WriteLine(line); // CHECKING COMMANDS
                     writer.WriteLine(line);
                 }
                 obj.Contents = builder.ToString();
@@ -94,12 +104,6 @@ namespace NAV_Comment_tool.indentationChecker
                 builder = new StringBuilder();
                 writer = new StringWriter(builder);
             }
-
-            //foreach(ObjectClass obj in ObjectClassRepository.objectRepository)
-            //{
-            //    Console.WriteLine(obj.Contents);
-            //}
-
             return true;
         }
     }

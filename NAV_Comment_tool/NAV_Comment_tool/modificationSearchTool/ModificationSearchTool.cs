@@ -7,6 +7,7 @@ using NAV_Comment_tool.fileSplitter;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace NAV_Comment_tool.modificationSearchTool
 {
@@ -35,14 +36,15 @@ namespace NAV_Comment_tool.modificationSearchTool
                     StringReader reader = new StringReader(obj.Contents);
                     StringBuilder builder = new StringBuilder();
                     StringWriter writer = new StringWriter(builder);
-                    string line, currentFlag = null, endFlag = ""; //MAYBE SUBJECT TO CHANGES
+                    string line, currentFlag = null; //MAYBE SUBJECT TO CHANGES
+                    Regex endFlag = new Regex("");
                     bool startFlag = false;
 
                     while (null != (line = reader.ReadLine()))
                     {
                         if (startFlag == true)
                         {
-                            if (line.Contains(currentFlag) && line.Contains(@"//") && line.Contains(endFlag)) //MAYBE SUBJECT TO CHANGES
+                            if (line.Contains(modtag) && endFlag.IsMatch(line)) //MAYBE SUBJECT TO CHANGES
                             {
                                 startFlag = false;
                                 if (builder.ToString() != "")
@@ -61,13 +63,33 @@ namespace NAV_Comment_tool.modificationSearchTool
                         }
                         else if (startFlag == false)
                         {
-                                if (line.Contains(modtag) && !(line.Contains("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//"))
+                            if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//"))
+                            {
+                                currentFlag = modtag;
+                                if (new Regex("<-+ *(IT/)?" + modtag).IsMatch(line))
                                 {
                                     startFlag = true;
-                                    currentFlag = modtag;
-                                    if (line.Contains(modtag + " begin")) endFlag = (modtag + " end");
-                                    if (line.Contains(modtag + @"/S")) endFlag = (modtag + @"/E"); //MAYBE SUBJECT TO CHANGES
-                                    if (line.Contains(@"<--")) endFlag = "-->";
+                                    endFlag = new Regex(@">-+ *(IT/)?" + modtag);
+                                }
+                                else if (new Regex("-+< *(IT/)?" + modtag).IsMatch(line))
+                                {
+                                    startFlag = true;
+                                    endFlag = new Regex(@"-+> *(IT/)?" + modtag);
+                                }
+                                else if (new Regex("(IT/)?" + modtag + " *begin").IsMatch(line))
+                                {
+                                    startFlag = true;
+                                    endFlag = new Regex(@"(IT/)?" + modtag + " *end");
+                                }
+                                else if (new Regex(@"(IT/)?" + modtag + " */S").IsMatch(line))
+                                {
+                                    startFlag = true;
+                                    endFlag = new Regex(@"(IT/)?" + modtag + " */E");
+                                }
+
+
+                                //if (line.Contains(modtag + @"/S")) endFlag = (modtag + @"/E"); //MAYBE SUBJECT TO CHANGES
+                                //if (line.Contains(@"<--")) endFlag = "-->";
                                 }
                                 else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                                 {
