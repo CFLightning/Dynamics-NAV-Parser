@@ -127,14 +127,14 @@ namespace NAV_Comment_tool.fileSplitter
             return tagPatterns;
         }
 
-        static public Regex GetFittingEndPattern(string codeLine)
+        static public Regex GetFittingEndPattern(string beginTagLine)
         {
             foreach (var patternPair in tagPairPattern)
             {
-                if (patternPair[(int)Marks.BEGIN].IsMatch(codeLine))
+                if (patternPair[(int)Marks.BEGIN].IsMatch(beginTagLine))
                 {
                     string patternString = patternPair[(int)Marks.END].ToString();
-                    string mod = GetTagedModyfication(codeLine);
+                    string mod = GetTagedModyfication(beginTagLine);
                     patternString = patternString.Replace(modNo, mod);
                     return new Regex(patternString);
                 }
@@ -149,6 +149,14 @@ namespace NAV_Comment_tool.fileSplitter
             else if (tagPatterns[(int)Marks.END].IsMatch(text))
                 return true;
             else if (tagPatterns[(int)Marks.OTHER].IsMatch(text))
+                return true;
+            else
+                return false;
+        }
+
+        static public bool CheckIfTagsIsAlone(string tagLine)
+        {
+            if (tagPatterns[(int)Marks.OTHER].IsMatch(tagLine))
                 return true;
             else
                 return false;
