@@ -60,10 +60,10 @@ namespace NAV_Comment_tool.modificationSearchTool
                             if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//"))
                             {
                                 currentFlag = modtag;
-                                if (new Regex("<-- *(IT/)?" + modtag + @"\s").IsMatch(line))
+                                if (new Regex("<-- *(IT/)?" + modtag + @"($| )").IsMatch(line)) //  + @"((\n))"
                                 {
                                     startFlag = true;
-                                    endFlag = new Regex(@"--> *(IT/)?" + modtag + @"\s");
+                                    endFlag = new Regex(@"--> *(IT/)?" + modtag + @"$");
                                 }
                                 else if (new Regex("(IT/)?" + modtag + " *begin").IsMatch(line))
                                 {
