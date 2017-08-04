@@ -43,7 +43,7 @@ namespace NAV_Comment_tool.fileSplitter
             endPatternParts.Add(@"(IT/)?" + modNo + " */E");
 
             List<string> otherPatternParts = new List<string>();
-            otherPatternParts.Add(@"" + modNo + "");
+            otherPatternParts.Add(@"" + modNo + @"([^A-Z0-9\.]*$)");
 
             Regex rgxBegin, rgxEnd, rgxOther;
             Regex[] rgxPair;
