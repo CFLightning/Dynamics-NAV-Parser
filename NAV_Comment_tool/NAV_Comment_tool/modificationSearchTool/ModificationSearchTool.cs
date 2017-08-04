@@ -72,7 +72,9 @@ namespace NAV_Comment_tool.modificationSearchTool
                             }
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                             {
-                                ChangeClassRepository.appendChange(new ChangeClass(currentFlag, "FieldFound Test MESSAGE", "Field"));
+                                ChangeClassRepository.appendChange(new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field"));
+                                Console.WriteLine(line);
+
                             }
                         }
                     }
@@ -84,8 +86,8 @@ namespace NAV_Comment_tool.modificationSearchTool
             {
                 if(change.ChangeType != "Field")
                 {
-                    Console.WriteLine("THIS IS A NEW CHANGE - " + change.ChangelogCode);
-                    Console.WriteLine(change.Contents);
+                    //Console.WriteLine("THIS IS A NEW CHANGE - " + change.ChangelogCode);
+                    //Console.WriteLine(change.Contents);
                 }
                 
             }
