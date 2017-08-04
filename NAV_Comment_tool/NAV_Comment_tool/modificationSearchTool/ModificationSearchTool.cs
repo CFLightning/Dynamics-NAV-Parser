@@ -59,21 +59,15 @@ namespace NAV_Comment_tool.modificationSearchTool
                         {
                             if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//"))
                             {
-                                currentFlag = modtag;
-                                if (new Regex("<-- *(IT/)?" + modtag + @"($| )").IsMatch(line)) //  + @"((\n))"
+                                if (ChangeCheck.CheckIfTagsIsAlone(line))
                                 {
-                                    startFlag = true;
-                                    endFlag = new Regex(@"--> *(IT/)?" + modtag + @"$");
+                                    ChangeClassRepository.appendChange(new ChangeClass(modtag, line, "Code"));
                                 }
-                                else if (new Regex("(IT/)?" + modtag + " *begin").IsMatch(line))
+                                else if(ChangeCheck.GetTagedModyfication(line) == modtag)
                                 {
+                                    currentFlag = modtag;
                                     startFlag = true;
-                                    endFlag = new Regex(@"(IT/)?" + modtag + " *end");
-                                }
-                                else if (new Regex(@"(IT/)?" + modtag + " */S").IsMatch(line)) // IT/FX01/S - IT/S
-                                {
-                                    startFlag = true;
-                                    endFlag = new Regex(@"(IT/)?" + modtag + " */E");
+                                    endFlag = ChangeCheck.GetFittingEndPattern(line);
                                 }
                             }
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
@@ -90,7 +84,7 @@ namespace NAV_Comment_tool.modificationSearchTool
             {
                 if(change.ChangeType != "Field")
                 {
-                    Console.WriteLine("THIS IS A NEW CHANGE" + change.ChangelogCode);
+                    Console.WriteLine("THIS IS A NEW CHANGE - " + change.ChangelogCode);
                     Console.WriteLine(change.Contents);
                 }
                 

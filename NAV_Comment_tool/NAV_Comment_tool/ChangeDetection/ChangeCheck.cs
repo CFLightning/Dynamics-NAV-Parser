@@ -26,7 +26,7 @@ namespace NAV_Comment_tool.fileSplitter
         static private Regex[] DefinePatterns()
         {
             string lineFrontComment = @" *// *";        // BEGIN,AND // brak  koment////
-            string lineBackComment = @".*\S+.\// *";    // OTHER
+            string lineBackComment = @".*(\S^(//))+.// *";    // OTHER
 
             List<string> beginPatternParts = new List<string>();
             beginPatternParts.Add(@"<-+ *(IT/)?(?<mod>[A-Z0-9\.]+)");
@@ -71,19 +71,19 @@ namespace NAV_Comment_tool.fileSplitter
         static private Regex[] DefinePatternsNEW()
         {
             string lineFrontComment = @" *// *";        // BEGIN,AND // brak  koment////
-            string lineBackComment = @".*\S+.\// *";    // OTHER
+            string lineBackComment = @".*(\S^(//))+.// *";    // OTHER
 
             List<Regex[]> PatternList = new List<Regex[]>();
 
             List<string> beginPatternParts = new List<string>();
-            beginPatternParts.Add(@"<-+ *(IT/)?" + modNo);
-            beginPatternParts.Add(@"-+< *(IT/)?" + modNo);
+            beginPatternParts.Add(@"<-+ *(IT/)?" + modNo + @"($| )");
+            //beginPatternParts.Add(@"-+< *(IT/)?" + modNo);
             beginPatternParts.Add(@"(IT/)?" + modNo + " *begin");
             beginPatternParts.Add(@"(IT/)?" + modNo + " */S");
 
             List<string> endPatternParts = new List<string>();
-            endPatternParts.Add(@">-+ *(IT/)?" + modNo + "");
-            endPatternParts.Add(@"-+> *(IT/)?" + modNo + "");
+            endPatternParts.Add(@"-+> *(IT/)?" + modNo + @"($| )");
+            //endPatternParts.Add(@">-+ *(IT/)?" + modNo + "");
             endPatternParts.Add(@"(IT/)?" + modNo + " *end");
             endPatternParts.Add(@"(IT/)?" + modNo + " */E");
 
@@ -114,7 +114,7 @@ namespace NAV_Comment_tool.fileSplitter
 
             string otherPattern = "(" + lineBackComment + otherPatternParts[0] + ")";
             for (int i = 1; i < otherPatternParts.Count; i++)
-                otherPattern += "|(" + lineBackComment + otherPatternParts[i] + ")";
+                otherPattern += "|(" + lineBackComment + otherPatternParts[i] + ")"; // CHANGEEE
 
             rgxBegin = new Regex(beginPattern);
             rgxEnd = new Regex(endPattern);
