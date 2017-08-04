@@ -4,6 +4,7 @@ using NAV_Comment_tool.repositories;
 using System.IO;
 using System;
 using System.Text;
+using NAV_Comment_tool.ChangeDetection;
 
 namespace NAV_Comment_tool.indentationChecker
 {
@@ -53,20 +54,17 @@ namespace NAV_Comment_tool.indentationChecker
                 {
                     if(triggerFlag == false && beginFlag == false)
                     {
-                        foreach (string flag in triggers)
+                        check = line.Trim(' '); // Diffrent variable to forbid the program from indenting Trigger=BEGIN lines
+                        if (ChangeDetection.TriggerAndFunctionDetection.DetectIfTriggerInLine(line) && !(line.EndsWith("=BEGIN")))
                         {
-                            check = line.Trim(' '); // Diffrent variable to forbid the program from indenting Trigger=BEGIN lines
-                            if (check.StartsWith(flag) && !(line.EndsWith("=BEGIN")))
-                            {
-                                triggerFlag = true;
-                            }
-                            else if (check.StartsWith(flag) && line.EndsWith("=BEGIN")) // line.Contains(flag) 
-                            {
-                                triggerFlag = true;
-                                beginFlag = true;
-                                endsToGo++;
-                                currentIndentation = line.IndexOf("BEGIN") + 2;
-                            }
+                            triggerFlag = true;
+                        }
+                        else if (ChangeDetection.TriggerAndFunctionDetection.DetectIfTriggerInLine(line) && line.EndsWith("=BEGIN")) // line.Contains(flag) 
+                        {
+                            triggerFlag = true;
+                            beginFlag = true;
+                            endsToGo++;
+                            currentIndentation = line.IndexOf("BEGIN") + 2;
                         }
                     }
                     if(triggerFlag == true && beginFlag == false)

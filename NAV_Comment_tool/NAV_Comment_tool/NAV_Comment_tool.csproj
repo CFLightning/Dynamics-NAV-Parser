@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeDetection\ChangeCheck.cs" />
+    <Compile Include="ChangeDetection\TriggerAndFunctionDetection.cs" />
     <Compile Include="fileSplitter\ExtractObjectParts.cs" />
     <Compile Include="fileSplitter\FileSplitter.cs" />
     <Compile Include="fileSplitter\lookForTxtFiles.cs" />
