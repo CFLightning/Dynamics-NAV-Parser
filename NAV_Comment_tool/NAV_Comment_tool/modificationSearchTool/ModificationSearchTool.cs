@@ -73,8 +73,6 @@ namespace NAV_Comment_tool.modificationSearchTool
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                             {
                                 ChangeClassRepository.appendChange(new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field"));
-                                Console.WriteLine(line);
-
                             }
                         }
                     }

@@ -143,17 +143,17 @@ namespace NAV_Comment_tool.fileSplitter
                 if (tagPatterns[(int)Marks.BEGIN].IsMatch(tag))
                 {
                     match = tagPatterns[(int)Marks.BEGIN].Match(tag);
-                    Console.WriteLine(Marks.BEGIN + "\t" + match.Groups["mod"].Value + "\t" + tag);
+                    //Console.WriteLine(Marks.BEGIN + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
                 else if (tagPatterns[(int)Marks.END].IsMatch(tag))
                 {
                     match = tagPatterns[(int)Marks.END].Match(tag);
-                    Console.WriteLine(Marks.END + "\t" + match.Groups["mod"].Value + "\t" + tag);
+                    //Console.WriteLine(Marks.END + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
                 else if (tagPatterns[(int)Marks.OTHER].IsMatch(tag))
                 {
                     match = tagPatterns[(int)Marks.OTHER].Match(tag);
-                    Console.WriteLine(Marks.OTHER + "\t" + match.Groups["mod"].Value + "\t" + tag);
+                    //Console.WriteLine(Marks.OTHER + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
 
                 tagModList.Add(match.Groups["mod"].Value);
@@ -165,7 +165,7 @@ namespace NAV_Comment_tool.fileSplitter
                 if (!modList.Contains(tag))
                 {
                     modList.Add(tag);
-                    Console.WriteLine(tag);
+                    //Console.WriteLine(tag);
                 }
             }
             

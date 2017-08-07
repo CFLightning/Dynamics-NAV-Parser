@@ -34,7 +34,6 @@ namespace NAV_Comment_tool.modificationSearchTool
                     {
                         line = line.Substring(firstLineIndent);
                     }
-                    Console.WriteLine(firstLineIndent + line);
                     writer.WriteLine(line);
                 }
 

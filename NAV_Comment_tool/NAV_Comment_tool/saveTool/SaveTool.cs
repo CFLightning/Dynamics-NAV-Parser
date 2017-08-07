@@ -17,12 +17,12 @@ namespace NAV_Comment_tool.saveTool
         }
         public static bool saveChangesToFiles(string path)
         {
-                foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
+            foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {
                 if(chg.ChangeType != "Field")
                 {
-                    File.AppendAllText(path + chg.ChangelogCode + " .txt", chg.Contents);
-                    File.AppendAllText(path + chg.ChangelogCode + " .txt", Environment.NewLine + Environment.NewLine);
+                     File.AppendAllText(path + chg.ChangelogCode + " .txt", chg.Contents);
+                     File.AppendAllText(path + chg.ChangelogCode + " .txt", Environment.NewLine + Environment.NewLine);
                 }
             }
             return true;

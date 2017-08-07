@@ -30,6 +30,10 @@ namespace NAV_Comment_tool.fileSplitter
                             }
                             if(newObject.Name != "")
                             {
+                                if(inputfile.EndOfStream)
+                                {
+                                    builder.AppendLine("}");
+                                }
                                 newObject.Contents = builder.ToString();
                                 ObjectClassRepository.appendObject(newObject);
                             }
