@@ -32,11 +32,23 @@ namespace NAV_Comment_tool.modificationSearchTool
                     ChangeClass change = new ChangeClass();
                     bool startFlag = false;
                     string trigger = "";
+                    bool fieldsFlag = false;
+                    string field = "";
 
                     while (null != (line = reader.ReadLine()))
                     {
                         if (ChangeDetection.TriggerAndFunctionDetection.DetectIfAnyTriggerInLine(line))
                             trigger = ChangeDetection.TriggerAndFunctionDetection.GetTriggerName(line);
+                        
+                        if (fieldsFlag == false && ChangeDetection.FieldDetection.DetectIfFieldsStartFlag(line))
+                            fieldsFlag = true;
+
+                        if (fieldsFlag == true && ChangeDetection.FieldDetection.DetectIfNextFieldFlag(line))
+                            field = ChangeDetection.FieldDetection.GetNextFieldName(line);
+
+                        if (fieldsFlag == true && ChangeDetection.FieldDetection.DetectIfFieldsEndFlag(line))
+                            fieldsFlag = false;
+
                         if (startFlag == true)
                         {
                             if (line.Contains(modtag) && endFlag.IsMatch(line)) //MAYBE SUBJECT TO CHANGES
@@ -45,7 +57,6 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 if (builder.ToString() != "")
                                 {
                                     change = new ChangeClass(currentFlag, builder.ToString(), "Code", trigger);
-                                    //ChangeClass change = new ChangeClass(currentFlag, builder.ToString(), "Code", trigger);
                                     ChangeClassRepository.appendChange(change);
                                     obj.Changelog.Add(change);
                                 }
@@ -78,7 +89,9 @@ namespace NAV_Comment_tool.modificationSearchTool
                             }
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                             {
-                                change = new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field", "TEST:Field name");
+                                string fieldContent = line.Substring((line.IndexOf("Description=") + "Description=".Length));
+                                fieldContent = fieldContent.Remove(fieldContent.Length - 1);
+                                change = new ChangeClass(modtag, fieldContent, "Field", field);
                                 ChangeClassRepository.appendChange(change);
                                 obj.Changelog.Add(change);
                             }
