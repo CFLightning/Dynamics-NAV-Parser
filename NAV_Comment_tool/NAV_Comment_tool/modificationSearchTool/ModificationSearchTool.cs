@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
+using NAV_Comment_tool.ChangeDetection;
 
 namespace NAV_Comment_tool.modificationSearchTool
 {
@@ -33,9 +34,12 @@ namespace NAV_Comment_tool.modificationSearchTool
                     string line, currentFlag = null; //MAYBE SUBJECT TO CHANGES
                     Regex endFlag = new Regex("");
                     bool startFlag = false;
+                    string trigger = "";
 
                     while (null != (line = reader.ReadLine()))
                     {
+                        if (ChangeDetection.TriggerAndFunctionDetection.DetectIfAnyTriggerInLine(line))
+                            trigger = ChangeDetection.TriggerAndFunctionDetection.GetTriggerName(line);
                         if (startFlag == true)
                         {
                             if (line.Contains(modtag) && endFlag.IsMatch(line)) //MAYBE SUBJECT TO CHANGES
@@ -43,7 +47,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 startFlag = false;
                                 if (builder.ToString() != "")
                                 {
-                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code"));
+                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code", trigger));
                                 }
 
                                 writer.Close();
@@ -61,7 +65,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                             {
                                 if (ChangeCheck.CheckIfTagsIsAlone(line))
                                 {
-                                    ChangeClassRepository.appendChange(new ChangeClass(modtag, line, "Code"));
+                                    ChangeClassRepository.appendChange(new ChangeClass(modtag, line, "Code", trigger));
                                 }
                                 else if(ChangeCheck.GetTagedModyfication(line) == modtag)
                                 {
@@ -72,7 +76,11 @@ namespace NAV_Comment_tool.modificationSearchTool
                             }
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                             {
+
                                 ChangeClassRepository.appendChange(new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field"));
+
+                                ChangeClassRepository.appendChange(new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field", "TEST:Field name"));
+                                Console.WriteLine(line);
                             }
                         }
                     }

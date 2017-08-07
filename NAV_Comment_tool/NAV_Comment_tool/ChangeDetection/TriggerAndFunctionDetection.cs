@@ -27,7 +27,7 @@ namespace NAV_Comment_tool.ChangeDetection
                 "OnDelete",
                 "OnQueryClose",
                 "OnValidate",
-                "OnLookup=",
+                "OnLookup",
                 "OnDrillDown",
                 "OnAssistEdit",
                 "OnControlAddin",
@@ -35,28 +35,59 @@ namespace NAV_Comment_tool.ChangeDetection
                 "PROCEDURE"
             };
         }
-
-        static public bool DetectIfTriggerInLine(string line)
+        
+        static public bool DetectIfAnyTriggerInLine(string line)
         {
-            line = line.Trim(' ');
             foreach (var trigger in triggers)
             {
-                //if (line.StartsWith(trigger) && (line.EndsWith("=BEGIN") || line.EndsWith("=VAR")))
-                if (line == trigger + "=VAR" || line == trigger + "=BEGIN")
-                    {
+                if (DetectIfSpecifiedTriggerInLine(trigger, line))
                     return true;
-                }
             }
             return false;
+        }
+
+        static public bool DetectIfSpecifiedTriggerInLine(string trigger, string line)
+        {
+            line = line.Trim(' ');
+            if (line == trigger + "=VAR" || line == trigger + "=BEGIN" || DetectifProcedureTriggerInLine(trigger, line))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        static private bool DetectifProcedureTriggerInLine(string trigger, string line)
+        {
+            if (line.Contains("PROCEDURE ") && trigger == "PROCEDURE")
+                return true;
+            else
+                return false;
         }
 
         static public string GetTriggerName(string triggerLine)
         {
             foreach (var trigger in triggers)
             {
-                if (DetectIfTriggerInLine(triggerLine))
+                if (DetectIfSpecifiedTriggerInLine(trigger, triggerLine))
                 {
+                    if (trigger == "PROCEDURE")
+                    {
+                        return GetProcedureName(triggerLine);
+                    }
                     return trigger;
+                }
+            }
+            return "";
+        }
+
+        static private string GetProcedureName(string triggerLine)
+        {
+            string[] split = triggerLine.Split(new string[] { " ", "@" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < split.Count(); i++)
+            {
+                if (split[i] == "PROCEDURE")
+                {
+                    return split[i] + " " + split[i + 1];
                 }
             }
             return "";
