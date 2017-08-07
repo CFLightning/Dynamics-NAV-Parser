@@ -49,12 +49,19 @@ namespace NAV_Comment_tool.ChangeDetection
         static public bool DetectIfSpecifiedTriggerInLine(string trigger, string line)
         {
             line = line.Trim(' ');
-            //if (line.StartsWith(trigger) && (line.EndsWith("=BEGIN") || line.EndsWith("=VAR")))
-            if (line == trigger + "=VAR" || line == trigger + "=BEGIN" || (line.Contains("PROCEDURE ") && trigger=="PROCEDURE"))
+            if (line == trigger + "=VAR" || line == trigger + "=BEGIN" || DetectifProcedureTriggerInLine(trigger, line))
             {
                 return true;
             }
             return false;
+        }
+
+        static private bool DetectifProcedureTriggerInLine(string trigger, string line)
+        {
+            if (line.Contains("PROCEDURE ") && trigger == "PROCEDURE")
+                return true;
+            else
+                return false;
         }
 
         static public string GetTriggerName(string triggerLine)
