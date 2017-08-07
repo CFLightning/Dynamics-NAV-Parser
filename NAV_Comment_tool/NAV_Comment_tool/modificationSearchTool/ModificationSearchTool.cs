@@ -59,7 +59,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 startFlag = false;
                                 if (builder.ToString() != "")
                                 {
-                                    change = new ChangeClass(currentFlag, builder.ToString(), "Code", trigger + (fieldsFlag? (" '" + field + "'") : ""), obj.Type + " " + obj.Number + " " + obj.Name);
+                                    change = new ChangeClass(currentFlag, builder.ToString(), "Code", (fieldsFlag ? (field + " - " ) : "") + trigger, obj.Type + " " + obj.Number + " " + obj.Name);
                                     ChangeClassRepository.appendChange(change);
                                     obj.Changelog.Add(change);
                                 }
@@ -94,7 +94,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                             {
                                 string fieldContent = line.Substring((line.IndexOf("Description=") + "Description=".Length));
                                 fieldContent = fieldContent.Remove(fieldContent.Length - 1);
-                                change = new ChangeClass(modtag, fieldContent, "Field", "'" + field + "'", obj.Type + " " + obj.Number + " " + obj.Name);
+                                change = new ChangeClass(modtag, fieldContent, "Field", field, obj.Type + " " + obj.Number + " " + obj.Name);
                                 ChangeClassRepository.appendChange(change);
                                 obj.Changelog.Add(change);
                             }
