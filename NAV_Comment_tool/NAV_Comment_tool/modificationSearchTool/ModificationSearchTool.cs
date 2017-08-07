@@ -47,7 +47,9 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 startFlag = false;
                                 if (builder.ToString() != "")
                                 {
-                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code", trigger));
+                                    ChangeClass change = new ChangeClass(currentFlag, builder.ToString(), "Code", trigger);
+                                    ChangeClassRepository.appendChange(change);
+                                    obj.Changelog.Add(change);
                                 }
 
                                 writer.Close();
@@ -65,7 +67,9 @@ namespace NAV_Comment_tool.modificationSearchTool
                             {
                                 if (ChangeCheck.CheckIfTagsIsAlone(line))
                                 {
-                                    ChangeClassRepository.appendChange(new ChangeClass(modtag, line, "Code", trigger));
+                                    ChangeClass change = new ChangeClass(modtag, line, "Code", trigger);
+                                    ChangeClassRepository.appendChange(change);
+                                    obj.Changelog.Add(change);
                                 }
                                 else if(ChangeCheck.GetTagedModyfication(line) == modtag)
                                 {
@@ -76,16 +80,12 @@ namespace NAV_Comment_tool.modificationSearchTool
                             }
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                             {
-
-                                ChangeClassRepository.appendChange(new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field"));
-
                                 ChangeClassRepository.appendChange(new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field", "TEST:Field name"));
                                 Console.WriteLine(line);
                             }
                         }
                     }
                 }
-               
             }
 
             foreach(ChangeClass change in ChangeClassRepository.changeRepository)

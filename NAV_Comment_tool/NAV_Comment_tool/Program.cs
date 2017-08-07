@@ -15,12 +15,8 @@ namespace NAV_Comment_tool
             IndentationChecker.checkIndentations();
             ModificationSearchTool.findAndSaveChanges();
             ModificationCleanerTool.cleanChangeCode();
-            SaveTool.saveObjectsToFiles(path);
             SaveTool.saveChangesToFiles(path);
             DocumentationTrigger.updateDocumentationTrigger();
-            //string path = @"C:\Users\Administrator\Documents\export\18cust.txt";
-            //string objectTextLines = System.IO.File.ReadAllText(path);
-            //string[] txt = ChangeCheck.GetTagList(objectTextLines).ToArray();
         }
     }
 }
