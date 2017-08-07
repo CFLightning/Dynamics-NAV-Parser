@@ -1,11 +1,9 @@
-﻿using NAV_Comment_tool.parserClass;
+﻿using NAV_Comment_tool.fileSplitter;
+using NAV_Comment_tool.parserClass;
 using NAV_Comment_tool.repositories;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NAV_Comment_tool.saveTool
 {
@@ -20,15 +18,18 @@ namespace NAV_Comment_tool.saveTool
          *      
          *      itd....
          */
+
         public static bool updateDocumentationTrigger()
         {
+            
+
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 StringReader reader = new StringReader(obj.Contents);
                 StringBuilder builder = new StringBuilder();
                 StringWriter writer = new StringWriter(builder);
                 string line;
-                bool bracketFlag = false, beginFlag = false, writecheck = false;
+                bool bracketFlag = false, beginFlag = false, writing = false, documentationPrompt = false, deleteFlag = false;
 
                 while (null != (line = reader.ReadLine()))
                 {
@@ -40,15 +41,17 @@ namespace NAV_Comment_tool.saveTool
                     if (line.StartsWith("    {") && beginFlag)
                     {
                         bracketFlag = true;
-                        writecheck = true;
-                        continue;
+                    }
+
+                    if(line.StartsWith("      Automated Documentation"))
+                    {
+                        documentationPrompt = true;
                     }
 
                     if (line.StartsWith("    }") && bracketFlag)
                     {
                         bracketFlag = false;
-                        writecheck = false;
-                        //continue;
+                        writing = true;
                     }
 
                     if (line.StartsWith("    END") && beginFlag)
@@ -56,17 +59,42 @@ namespace NAV_Comment_tool.saveTool
                         beginFlag = false;
                     }
 
-                    //if (writecheck)
-                    //{
-                    //    Console.WriteLine("found documentation" + line);
-                    //}
-
-                    if (writecheck)
+                    if(line.StartsWith("      #"))
                     {
-                        line = "new code" + Environment.NewLine + line;
-                        Console.WriteLine(line);
+                        deleteFlag = false;
+                        foreach (string item in ChangeCheck.GetModyficationList(obj.Contents))
+                        {
+                            if (line.Contains(item)) deleteFlag = true;
+                        }
                     }
+                   
+
+                    if (writing)
+                    {
+                        if(!(documentationPrompt)) writer.WriteLine(Environment.NewLine + "      Automated Documentation");
+                        foreach (string item in ChangeCheck.GetModyficationList(obj.Contents))
+                        {
+                            writer.WriteLine("      #" + item + "#");
+                            foreach (ChangeClass change in obj.Changelog)
+                            {
+                                if (change.ChangelogCode == item)
+                                {
+                                    writer.WriteLine("      - New " + change.ChangeType + ": " + change.Location);
+                                }
+                            }
+                        }
+                        writing = false;
+                    }
+                    if(!(deleteFlag)) writer.WriteLine(line);
                 }
+
+                obj.Contents = builder.ToString();
+
+                writer.Close();
+                builder = new StringBuilder();
+                writer = new StringWriter(builder);
+                //line = "Thus, the place here shall be occupied by the documentation lines" + Environment.NewLine + line;
+
             }
             return true;
         }

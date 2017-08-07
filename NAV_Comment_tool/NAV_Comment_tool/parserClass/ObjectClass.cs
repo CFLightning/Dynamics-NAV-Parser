@@ -8,7 +8,7 @@ namespace NAV_Comment_tool.parserClass
         private string type;
         private string name;
         private string contents;
-        private List<ChangelogClass> changelog;
+        public List<ChangeClass> changelog;
 
         public ObjectClass()
         {
@@ -16,6 +16,7 @@ namespace NAV_Comment_tool.parserClass
             this.type = "";
             this.name = "";
             this.contents = "";
+            this.changelog = new List<ChangeClass>();
         }
         public ObjectClass(int number, string type, string name, string contents)
         {
@@ -23,11 +24,12 @@ namespace NAV_Comment_tool.parserClass
             this.type = type;
             this.name = name;
             this.contents = contents;
+            this.changelog = new List<ChangeClass>();
         }
         public int Number { get => number; set => number = value; }
         public string Type { get => type; set => type = value; }
         public string Name { get => name; set => name = value; }
         public string Contents { get => contents; set => contents = value; }
-        internal List<ChangelogClass> Changelog { get => changelog; set => changelog = value; }
+        internal List<ChangeClass> Changelog { get => changelog; set => changelog = value; }
     }
 }

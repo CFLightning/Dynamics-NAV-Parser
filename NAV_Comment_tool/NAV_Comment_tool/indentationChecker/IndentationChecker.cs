@@ -4,7 +4,6 @@ using NAV_Comment_tool.repositories;
 using System.IO;
 using System;
 using System.Text;
-using NAV_Comment_tool.ChangeDetection;
 
 namespace NAV_Comment_tool.indentationChecker
 {

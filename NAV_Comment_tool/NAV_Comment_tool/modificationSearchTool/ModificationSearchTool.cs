@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NAV_Comment_tool.repositories;
 using NAV_Comment_tool.parserClass;
-using System.Linq;
 using NAV_Comment_tool.fileSplitter;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
-using NAV_Comment_tool.ChangeDetection;
 
 namespace NAV_Comment_tool.modificationSearchTool
 {
@@ -33,6 +29,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                     StringWriter writer = new StringWriter(builder);
                     string line, currentFlag = null; //MAYBE SUBJECT TO CHANGES
                     Regex endFlag = new Regex("");
+                    ChangeClass change = new ChangeClass();
                     bool startFlag = false;
                     string trigger = "";
 
@@ -47,7 +44,9 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 startFlag = false;
                                 if (builder.ToString() != "")
                                 {
-                                    ChangeClassRepository.appendChange(new ChangeClass(currentFlag, builder.ToString(), "Code", trigger));
+                                    change = new ChangeClass(currentFlag, builder.ToString(), "Code", trigger);
+                                    ChangeClassRepository.appendChange(change);
+                                    obj.Changelog.Add(change);
                                 }
 
                                 writer.Close();
@@ -76,26 +75,14 @@ namespace NAV_Comment_tool.modificationSearchTool
                             }
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                             {
-
-                                ChangeClassRepository.appendChange(new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field"));
-
-                                ChangeClassRepository.appendChange(new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field", "TEST:Field name"));
-                                Console.WriteLine(line);
+                                change = new ChangeClass(modtag, ("FieldFound Test MESSAGE" + modtag), "Field", "TEST:Field name");
+                                ChangeClassRepository.appendChange(change);
+                                obj.Changelog.Add(change);
                             }
                         }
                     }
                 }
                
-            }
-
-            foreach(ChangeClass change in ChangeClassRepository.changeRepository)
-            {
-                if(change.ChangeType != "Field")
-                {
-                    //Console.WriteLine("THIS IS A NEW CHANGE - " + change.ChangelogCode);
-                    //Console.WriteLine(change.Contents);
-                }
-                
             }
             return true;
         }
