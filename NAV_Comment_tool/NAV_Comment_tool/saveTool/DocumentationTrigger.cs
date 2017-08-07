@@ -21,8 +21,6 @@ namespace NAV_Comment_tool.saveTool
 
         public static bool updateDocumentationTrigger()
         {
-            
-
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 StringReader reader = new StringReader(obj.Contents);
@@ -59,7 +57,7 @@ namespace NAV_Comment_tool.saveTool
                         beginFlag = false;
                     }
 
-                    if(line.StartsWith("      #"))
+                    if(line.StartsWith("      #") && documentationPrompt)
                     {
                         deleteFlag = false;
                         foreach (string item in ChangeCheck.GetModyficationList(obj.Contents))
@@ -67,7 +65,6 @@ namespace NAV_Comment_tool.saveTool
                             if (line.Contains(item)) deleteFlag = true;
                         }
                     }
-                   
 
                     if (writing)
                     {

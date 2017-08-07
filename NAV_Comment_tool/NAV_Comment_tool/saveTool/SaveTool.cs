@@ -19,6 +19,11 @@ namespace NAV_Comment_tool.saveTool
         {
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {
+                if (File.Exists(path + chg.ChangelogCode + " .txt")) File.Delete(path + chg.ChangelogCode + " .txt");
+            }
+
+            foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
+            {
                 if(chg.ChangeType != "Field")
                 {
                      File.AppendAllText(path + chg.ChangelogCode + " .txt", chg.Contents);

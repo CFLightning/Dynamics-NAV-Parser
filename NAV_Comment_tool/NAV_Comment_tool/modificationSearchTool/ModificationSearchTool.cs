@@ -45,6 +45,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 if (builder.ToString() != "")
                                 {
                                     change = new ChangeClass(currentFlag, builder.ToString(), "Code", trigger);
+                                    //ChangeClass change = new ChangeClass(currentFlag, builder.ToString(), "Code", trigger);
                                     ChangeClassRepository.appendChange(change);
                                     obj.Changelog.Add(change);
                                 }
@@ -64,7 +65,9 @@ namespace NAV_Comment_tool.modificationSearchTool
                             {
                                 if (ChangeCheck.CheckIfTagsIsAlone(line))
                                 {
-                                    ChangeClassRepository.appendChange(new ChangeClass(modtag, line, "Code", trigger));
+                                    change = new ChangeClass(modtag, line, "Code", trigger);
+                                    ChangeClassRepository.appendChange(change);
+                                    obj.Changelog.Add(change);
                                 }
                                 else if(ChangeCheck.GetTagedModyfication(line) == modtag)
                                 {
@@ -82,7 +85,6 @@ namespace NAV_Comment_tool.modificationSearchTool
                         }
                     }
                 }
-               
             }
             return true;
         }

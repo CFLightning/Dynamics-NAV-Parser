@@ -18,6 +18,7 @@ namespace NAV_Comment_tool.parserClass
             this.contents = "";
             this.changelog = new List<ChangeClass>();
         }
+
         public ObjectClass(int number, string type, string name, string contents)
         {
             this.number = number;
@@ -26,6 +27,7 @@ namespace NAV_Comment_tool.parserClass
             this.contents = contents;
             this.changelog = new List<ChangeClass>();
         }
+
         public int Number { get => number; set => number = value; }
         public string Type { get => type; set => type = value; }
         public string Name { get => name; set => name = value; }
