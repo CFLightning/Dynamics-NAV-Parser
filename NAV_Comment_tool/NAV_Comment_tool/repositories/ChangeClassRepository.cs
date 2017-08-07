@@ -7,7 +7,7 @@ namespace NAV_Comment_tool.repositories
     {
             public static List<ChangeClass> changeRepository = new List<ChangeClass>();
 
-            public static void appendChange(ChangeClass newChange)
+            public static void AppendChange(ChangeClass newChange)
             {
                 changeRepository.Add(newChange);
             }

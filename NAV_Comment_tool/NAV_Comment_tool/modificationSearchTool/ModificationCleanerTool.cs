@@ -7,7 +7,7 @@ namespace NAV_Comment_tool.modificationSearchTool
 {
     class ModificationCleanerTool
     {
-        public static bool cleanChangeCode()
+        public static bool CleanChangeCode()
         {
             foreach(ChangeClass chg in ChangeClassRepository.changeRepository)
             {

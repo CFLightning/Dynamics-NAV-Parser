@@ -7,7 +7,7 @@ namespace NAV_Comment_tool.saveTool
 {
     class SaveTool
     {
-        public static bool saveObjectsToFiles(string path)
+        public static bool SaveObjectsToFiles(string path)
         {
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
@@ -15,7 +15,7 @@ namespace NAV_Comment_tool.saveTool
             }
             return true;
         }
-        public static bool saveChangesToFiles(string path)
+        public static bool SaveChangesToFiles(string path)
         {
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {

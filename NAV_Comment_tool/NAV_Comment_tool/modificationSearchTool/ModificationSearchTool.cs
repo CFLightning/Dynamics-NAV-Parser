@@ -12,16 +12,16 @@ namespace NAV_Comment_tool.modificationSearchTool
     {
         private static List<string> tags;
 
-        public static void initTags(ObjectClass obj)
+        public static void InitTags(ObjectClass obj)
         {
             tags = ChangeCheck.GetModyficationList(obj.Contents);
         }
 
-        public static bool findAndSaveChanges()
+        public static bool FindAndSaveChanges()
         {
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
-                initTags(obj);
+                InitTags(obj);
                 foreach (string modtag in tags) 
                 {
                     StringReader reader = new StringReader(obj.Contents);
@@ -60,7 +60,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 if (builder.ToString() != "")
                                 {
                                     change = new ChangeClass(currentFlag, builder.ToString(), "Code", (fieldsFlag ? (field + " - " ) : "") + trigger, obj.Type + " " + obj.Number + " " + obj.Name);
-                                    ChangeClassRepository.appendChange(change);
+                                    ChangeClassRepository.AppendChange(change);
                                     obj.Changelog.Add(change);
                                 }
 
@@ -80,7 +80,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 if (ChangeCheck.CheckIfTagsIsAlone(line))
                                 {
                                     change = new ChangeClass(modtag, line, "Code", trigger, obj.Type + " " + obj.Number + " " + obj.Name);
-                                    ChangeClassRepository.appendChange(change);
+                                    ChangeClassRepository.AppendChange(change);
                                     obj.Changelog.Add(change);
                                 }
                                 else if(ChangeCheck.GetTagedModyfication(line) == modtag)
@@ -95,7 +95,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 string fieldContent = line.Substring((line.IndexOf("Description=") + "Description=".Length));
                                 fieldContent = fieldContent.Remove(fieldContent.Length - 1);
                                 change = new ChangeClass(modtag, fieldContent, "Field", field, obj.Type + " " + obj.Number + " " + obj.Name);
-                                ChangeClassRepository.appendChange(change);
+                                ChangeClassRepository.AppendChange(change);
                                 obj.Changelog.Add(change);
                             }
                         }

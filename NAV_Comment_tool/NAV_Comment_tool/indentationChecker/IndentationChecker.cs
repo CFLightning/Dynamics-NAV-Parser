@@ -11,7 +11,7 @@ namespace NAV_Comment_tool.indentationChecker
     {
         private static List<String> triggers;
 
-        public static void initTriggerList()
+        public static void InitTriggerList()
         {
             triggers = new List<string>
             {
@@ -37,9 +37,9 @@ namespace NAV_Comment_tool.indentationChecker
             };
         }
 
-        public static bool checkIndentations()
+        public static bool CheckIndentations()
         {
-            initTriggerList();
+            InitTriggerList();
             foreach(ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 StringReader reader = new StringReader(obj.Contents);

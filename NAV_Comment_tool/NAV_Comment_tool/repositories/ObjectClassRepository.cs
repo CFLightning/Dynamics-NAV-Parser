@@ -7,7 +7,7 @@ namespace NAV_Comment_tool.repositories
     {
         public static List<ObjectClass> objectRepository = new List<ObjectClass>();
 
-        public static void appendObject(ObjectClass newObject)
+        public static void AppendObject(ObjectClass newObject)
         {
             objectRepository.Add(newObject);
         }

@@ -19,7 +19,7 @@ namespace NAV_Comment_tool.saveTool
          *      itd....
          */
 
-        public static bool updateDocumentationTrigger()
+        public static bool UpdateDocumentationTrigger()
         {
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
