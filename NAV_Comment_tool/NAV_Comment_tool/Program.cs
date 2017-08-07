@@ -18,6 +18,7 @@ namespace NAV_Comment_tool
             ModificationSearchTool.FindAndSaveChanges();
             ModificationCleanerTool.CleanChangeCode();
             DocumentationTrigger.UpdateDocumentationTrigger();
+            DocumentationExport.GenerateDocumentationFile();
             SaveTool.SaveObjectsToFiles(path);
             SaveTool.SaveChangesToFiles(path);
         }
