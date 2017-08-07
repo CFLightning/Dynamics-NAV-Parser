@@ -44,9 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangeDetection\ChangeCheck.cs" />
+    <Compile Include="ChangeDetection\TagDetection.cs" />
     <Compile Include="ChangeDetection\FieldDetection.cs" />
-    <Compile Include="ChangeDetection\TriggerAndFunctionDetection.cs" />
+    <Compile Include="ChangeDetection\TriggerDetection.cs" />
     <Compile Include="fileSplitter\ExtractObjectParts.cs" />
     <Compile Include="fileSplitter\FileSplitter.cs" />
     <Compile Include="fileSplitter\lookForTxtFiles.cs" />

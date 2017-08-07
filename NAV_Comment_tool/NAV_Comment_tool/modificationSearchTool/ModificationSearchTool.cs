@@ -37,8 +37,8 @@ namespace NAV_Comment_tool.modificationSearchTool
 
                     while (null != (line = reader.ReadLine()))
                     {
-                        if (ChangeDetection.TriggerAndFunctionDetection.DetectIfAnyTriggerInLine(line))
-                            trigger = ChangeDetection.TriggerAndFunctionDetection.GetTriggerName(line);
+                        if (ChangeDetection.TriggerDetection.DetectIfAnyTriggerInLine(line))
+                            trigger = ChangeDetection.TriggerDetection.GetTriggerName(line);
                         
                         if (fieldsFlag == false && ChangeDetection.FieldDetection.DetectIfFieldsStartFlag(line))
                             fieldsFlag = true;

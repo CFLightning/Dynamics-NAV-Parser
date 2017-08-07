@@ -54,11 +54,11 @@ namespace NAV_Comment_tool.indentationChecker
                     if(triggerFlag == false && beginFlag == false)
                     {
                         check = line.Trim(' '); // Diffrent variable to forbid the program from indenting Trigger=BEGIN lines
-                        if (ChangeDetection.TriggerAndFunctionDetection.DetectIfAnyTriggerInLine(line) && !(line.EndsWith("=BEGIN")))
+                        if (ChangeDetection.TriggerDetection.DetectIfAnyTriggerInLine(line) && !(line.EndsWith("=BEGIN")))
                         {
                             triggerFlag = true;
                         }
-                        else if (ChangeDetection.TriggerAndFunctionDetection.DetectIfAnyTriggerInLine(line) && line.EndsWith("=BEGIN")) // line.Contains(flag) 
+                        else if (ChangeDetection.TriggerDetection.DetectIfAnyTriggerInLine(line) && line.EndsWith("=BEGIN")) // line.Contains(flag) 
                         {
                             triggerFlag = true;
                             beginFlag = true;

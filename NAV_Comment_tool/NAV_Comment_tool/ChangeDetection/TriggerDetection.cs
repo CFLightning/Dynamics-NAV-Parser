@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace NAV_Comment_tool.ChangeDetection
 {
-    static class TriggerAndFunctionDetection
+    static class TriggerDetection
     {
         private static List<String> triggers;
 
-        static TriggerAndFunctionDetection()
+        static TriggerDetection()
         {
             triggers = new List<string>
             {
