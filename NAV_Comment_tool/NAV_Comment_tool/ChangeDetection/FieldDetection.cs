@@ -24,7 +24,7 @@ namespace NAV_Comment_tool.ChangeDetection
         static public string GetNextFieldName(string codeLine)
         {
             Match match = rgx.Match(codeLine);
-            return match.Groups["FieldName"].Value;
+            return match.Groups["FieldName"].Value.Trim(' ');
         }
 
         static public bool DetectIfFieldsStartFlag(string codeLine)
