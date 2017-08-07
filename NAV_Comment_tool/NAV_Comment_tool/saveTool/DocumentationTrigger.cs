@@ -91,8 +91,6 @@ namespace NAV_Comment_tool.saveTool
                 writer.Close();
                 builder = new StringBuilder();
                 writer = new StringWriter(builder);
-                //line = "Thus, the place here shall be occupied by the documentation lines" + Environment.NewLine + line;
-
             }
             return true;
         }
