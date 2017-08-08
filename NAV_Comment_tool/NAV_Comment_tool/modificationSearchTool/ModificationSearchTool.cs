@@ -75,7 +75,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 }
                                 nesting--; // NESTING DODANE <-----
                             }
-                            else if (line.Contains(nestedFlag))
+                            else if (line.EndsWith(nestedFlag))
                             {
                                 nesting++; // DODANE <-----
                             }
