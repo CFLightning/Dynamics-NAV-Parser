@@ -57,7 +57,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                         {
                             if (line.Contains(modtag) && endFlag.IsMatch(line)) //MAYBE SUBJECT TO CHANGES
                             {
-                                if(nesting == 1) // IF DODANY <-----
+                                if (nesting == 1) // IF DODANY <-----
                                 {
                                     startFlag = false;
                                     if (builder.ToString() != "")
@@ -73,7 +73,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 }
                                 nesting--; // NESTING DODANE <-----
                             }
-                            else if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//") && ChangeCheck.GetTagedModyfication(line) == modtag) // CAŁY ELIF DODANY <-----
+                            else if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//") && ChangeCheck.GetTagedModyfication(line) == modtag)// && ChangeCheck.GetFittingEndPattern(line) == endFlag) // CAŁY ELIF DODANY <----- // 
                             {
                                 nesting++; // DODANE <-----
                             }
