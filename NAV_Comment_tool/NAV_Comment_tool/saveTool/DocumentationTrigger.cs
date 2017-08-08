@@ -82,6 +82,7 @@ namespace NAV_Comment_tool.saveTool
 
                                 if (change.ChangeType == "Action") actionCounter++;
                             }
+
                             if(actionCounter == 1)
                             {
                                 writer.WriteLine("      - New Action");

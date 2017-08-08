@@ -57,7 +57,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                         {
                             if (line.Contains(modtag) && endFlag.IsMatch(line)) //MAYBE SUBJECT TO CHANGES
                             {
-                                if(nesting == 1)
+                                if(nesting == 1) // IF DODANY <-----
                                 {
                                     startFlag = false;
                                     if (builder.ToString() != "")
@@ -71,11 +71,11 @@ namespace NAV_Comment_tool.modificationSearchTool
                                     builder = new StringBuilder();
                                     writer = new StringWriter(builder);
                                 }
-                                nesting--;
+                                nesting--; // NESTING DODANE <-----
                             }
-                            else if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//") && ChangeCheck.GetTagedModyfication(line) == modtag)
+                            else if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//") && ChangeCheck.GetTagedModyfication(line) == modtag) // CAŁY ELIF DODANY <-----
                             {
-                                nesting++;
+                                nesting++; // DODANE <-----
                             }
                             else
                             {
@@ -96,7 +96,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 {
                                     currentFlag = modtag;
                                     startFlag = true;
-                                    nesting++;
+                                    nesting++; // ZMIENIONE <-----
                                     endFlag = ChangeCheck.GetFittingEndPattern(line);
                                 }
                             }

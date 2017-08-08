@@ -52,7 +52,7 @@ namespace NAV_Comment_tool.indentationChecker
                 StringBuilder builder = new StringBuilder();
                 StringWriter writer = new StringWriter(builder);
                 string line, check = "";
-                bool triggerFlag = false, beginFlag = false;
+                bool triggerFlag = false, beginFlag = false, isBegin = false;
                 int currentIndentation = 0, endsToGo = 0;
 
                 while (null != (line = reader.ReadLine()))
@@ -77,6 +77,7 @@ namespace NAV_Comment_tool.indentationChecker
                         if (line.Contains(" BEGIN ") || line.EndsWith(" BEGIN")) // || line.Contains("=BEGIN")
                         {
                             beginFlag = true;
+                            isBegin = true;
                             endsToGo++;
                             currentIndentation = line.IndexOf("BEGIN") + 2;
                         }
@@ -92,13 +93,14 @@ namespace NAV_Comment_tool.indentationChecker
                             }
                             endsToGo--;
                         }
-                        if ( ((line.Length - line.TrimStart(' ').Length) < currentIndentation) && triggerFlag == true && beginFlag == true && !(line.Contains(check))) // && !(line.Contains("BEGIN")
+                        if ( ((line.Length - line.TrimStart(' ').Length) < currentIndentation) && triggerFlag == true && beginFlag == true && !(line.Contains(check)) && !(isBegin)) // && !(line.Contains("BEGIN")
                         {
                             string indenter = string.Empty.PadLeft(currentIndentation);
                             line = indenter + line.TrimStart(' '); 
                         }
                     }
                     writer.WriteLine(line);
+                    isBegin = false;
                 }
                 obj.Contents = builder.ToString();
 
