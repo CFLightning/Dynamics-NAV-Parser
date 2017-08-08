@@ -29,6 +29,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                     StringWriter writer = new StringWriter(builder);
                     string line, currentFlag = null; //MAYBE SUBJECT TO CHANGES
                     Regex endFlag = new Regex("");
+                    //Regex[] endFlags = new Regex[3];
                     ChangeClass change = new ChangeClass();
                     bool startFlag = false;
                     int nesting = 0;
@@ -55,7 +56,7 @@ namespace NAV_Comment_tool.modificationSearchTool
 
                         if (startFlag == true)
                         {
-                            if (line.Contains(modtag) && endFlag.IsMatch(line)) //MAYBE SUBJECT TO CHANGES
+                            if (line.Contains(modtag) && endFlag.IsMatch(line)) //Problem jest ze strzałkami i zagnieżdżeniami !
                             {
                                 if (nesting == 1) // IF DODANY <-----
                                 {
@@ -73,7 +74,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 }
                                 nesting--; // NESTING DODANE <-----
                             }
-                            else if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//") && ChangeCheck.GetTagedModyfication(line) == modtag)// && ChangeCheck.GetFittingEndPattern(line) == endFlag) // CAŁY ELIF DODANY <----- // 
+                            else if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//") && ChangeCheck.GetTagedModyfication(line) == modtag)
                             {
                                 nesting++; // DODANE <-----
                             }

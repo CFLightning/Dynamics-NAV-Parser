@@ -38,8 +38,8 @@ namespace NAV_Comment_tool.fileSplitter
             beginPatternParts.Add(prefix + modNo + @" */S" + endSymbol);
 
             List<string> endPatternParts = new List<string>();
-            endPatternParts.Add(@"-+> *(IT/)?" + modNo + endSymbol);
-            endPatternParts.Add(prefix + modNo + @" *end" + endSymbol);
+            endPatternParts.Add(@"-+> *" + prefix + modNo + endSymbol);
+            endPatternParts.Add(prefix + modNo + @" * end" + endSymbol);
             endPatternParts.Add(prefix + modNo + @" */E" + endSymbol);
 
             List<string> otherPatternParts = new List<string>();
