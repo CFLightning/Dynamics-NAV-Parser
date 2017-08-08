@@ -5,7 +5,6 @@ using NAV_Comment_tool.fileSplitter;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Linq;
 
 namespace NAV_Comment_tool.modificationSearchTool
 {

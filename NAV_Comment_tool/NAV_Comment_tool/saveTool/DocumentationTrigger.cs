@@ -71,6 +71,7 @@ namespace NAV_Comment_tool.saveTool
                         if(!(documentationPrompt)) writer.WriteLine(Environment.NewLine + "      Automated Documentation");
                         foreach (string item in ChangeCheck.GetModyficationList(obj.Contents))
                         {
+                            int actionCounter = 0;
                             writer.WriteLine("      #" + item + "#");
                             foreach (ChangeClass change in obj.Changelog)
                             {
@@ -78,7 +79,18 @@ namespace NAV_Comment_tool.saveTool
                                 {
                                     writer.WriteLine("      - New " + change.ChangeType + ": " + change.Location);
                                 }
+
+                                if (change.ChangeType == "Action") actionCounter++;
                             }
+                            if(actionCounter == 1)
+                            {
+                                writer.WriteLine("      - New Action");
+                            }
+                            else if(actionCounter > 1)
+                            {
+                                writer.WriteLine("      - New Actions");
+                            }
+                            
                         }
                         writing = false;
                     }
