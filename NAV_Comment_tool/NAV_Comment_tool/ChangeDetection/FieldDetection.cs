@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace NAV_Comment_tool.ChangeDetection
 {
@@ -36,6 +37,13 @@ namespace NAV_Comment_tool.ChangeDetection
                 return true;
             else
                 return false;
+        }
+
+        static public string GetFieldDescription(string codeLine)
+        {
+            string fieldDescription = codeLine.Substring((codeLine.IndexOf("Description=") + "Description=".Length));
+            fieldDescription = fieldDescription.Remove(fieldDescription.Length - 1).Trim(' ');
+            return fieldDescription;
         }
     }
 }

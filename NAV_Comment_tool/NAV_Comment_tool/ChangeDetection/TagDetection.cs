@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using NAV_Comment_tool.ChangeDetection;
+using System.Linq;
 
 namespace NAV_Comment_tool.fileSplitter
 {
@@ -11,7 +13,7 @@ namespace NAV_Comment_tool.fileSplitter
 
         static ChangeCheck()
         {
-            modNo = @"(?<mod>[A-Z0-9\.]+)";
+            modNo = @"(?<mod>[A-Z0-9\._-]+)";
             tagPatterns = new Regex[3];
             tagPairPattern = new List<Regex[]>();
             DefinePatternsNEW();
@@ -139,17 +141,14 @@ namespace NAV_Comment_tool.fileSplitter
                 if (tagPatterns[(int)Marks.BEGIN].IsMatch(tag))
                 {
                     match = tagPatterns[(int)Marks.BEGIN].Match(tag);
-                    //Console.WriteLine(Marks.BEGIN + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
                 else if (tagPatterns[(int)Marks.END].IsMatch(tag))
                 {
                     match = tagPatterns[(int)Marks.END].Match(tag);
-                    //Console.WriteLine(Marks.END + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
                 else if (tagPatterns[(int)Marks.OTHER].IsMatch(tag))
                 {
                     match = tagPatterns[(int)Marks.OTHER].Match(tag);
-                    //Console.WriteLine(Marks.OTHER + "\t" + match.Groups["mod"].Value + "\t" + tag);
                 }
 
                 tagModList.Add(match.Groups["mod"].Value);
@@ -188,7 +187,7 @@ namespace NAV_Comment_tool.fileSplitter
         static public List<string> GetModyficationList(string code)
         {
             string[] codeLines = code.Replace("\r", "").Split('\n');
-            return FindModsInTags(FindTags(codeLines));
+            return FindModsInTags(FindTags(codeLines)).Union(GetFieldDescriptionTagList(code)).ToList();
         }
 
         static public List<string> GetTagList(string code)
@@ -197,6 +196,34 @@ namespace NAV_Comment_tool.fileSplitter
             return FindTags(codeLines);
         }
 
+        static public List<string> GetFieldDescriptionTagList(string code)
+        {
+            string[] codeLines = code.Replace("\r", "").Split('\n');
+            List<string> tagList = new List<string>();
+
+            int i = 0;
+            while (!FieldDetection.DetectIfFieldsStartFlag(codeLines[i]))
+                i++;
+            while (!FieldDetection.DetectIfFieldsEndFlag(codeLines[i]))
+            {
+                if (codeLines[i].Contains("Description="))
+                {
+                    string fieldDescription = ChangeDetection.FieldDetection.GetFieldDescription(codeLines[i]);
+                    tagList.AddRange(fieldDescription.Split(',').ToList());
+                }
+                i++;
+            }
+
+            List<string> modList = new List<string>();
+            foreach (var tag in tagList)
+            {
+                if (!modList.Contains(tag))
+                {
+                    modList.Add(tag);
+                }
+            }
+            return tagList;
+        }
     }
 }
 

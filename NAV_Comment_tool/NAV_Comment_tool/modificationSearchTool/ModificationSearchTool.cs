@@ -5,6 +5,7 @@ using NAV_Comment_tool.fileSplitter;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace NAV_Comment_tool.modificationSearchTool
 {
@@ -92,8 +93,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                             }
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                             {
-                                string fieldContent = line.Substring((line.IndexOf("Description=") + "Description=".Length));
-                                fieldContent = fieldContent.Remove(fieldContent.Length - 1);
+                                string fieldContent = ChangeDetection.FieldDetection.GetFieldDescription(line);
                                 change = new ChangeClass(modtag, fieldContent, "Field", field, obj.Type + " " + obj.Number + " " + obj.Name);
                                 ChangeClassRepository.AppendChange(change);
                                 obj.Changelog.Add(change);
