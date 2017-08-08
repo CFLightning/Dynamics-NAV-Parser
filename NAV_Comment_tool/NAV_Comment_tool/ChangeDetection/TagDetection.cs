@@ -202,16 +202,19 @@ namespace NAV_Comment_tool.fileSplitter
             List<string> tagList = new List<string>();
 
             int i = 0;
-            while (!FieldDetection.DetectIfFieldsStartFlag(codeLines[i]))
-                i++;
-            while (!FieldDetection.DetectIfFieldsEndFlag(codeLines[i]))
+            while (i < codeLines.Length - 1)
             {
-                if (codeLines[i].Contains("Description="))
+                while (!FieldDetection.DetectIfFieldsStartFlag(codeLines[i]) && i < codeLines.Length - 1)
+                    i++;
+                while (!FieldDetection.DetectIfFieldsEndFlag(codeLines[i]) && i < codeLines.Length - 1)
                 {
-                    string fieldDescription = ChangeDetection.FieldDetection.GetFieldDescription(codeLines[i]);
-                    tagList.AddRange(fieldDescription.Split(',').ToList());
+                    if (codeLines[i].Contains("Description="))
+                    {
+                        string fieldDescription = ChangeDetection.FieldDetection.GetFieldDescription(codeLines[i]);
+                        tagList.AddRange(fieldDescription.Split(',').ToList());
+                    }
+                    i++;
                 }
-                i++;
             }
 
             List<string> modList = new List<string>();

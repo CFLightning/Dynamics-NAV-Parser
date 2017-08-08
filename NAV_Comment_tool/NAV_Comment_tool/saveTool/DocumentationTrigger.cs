@@ -65,7 +65,6 @@ namespace NAV_Comment_tool.saveTool
                             if (line.Contains(item)) deleteFlag = true;
                         }
                     }
-                   
 
                     if (writing)
                     {
