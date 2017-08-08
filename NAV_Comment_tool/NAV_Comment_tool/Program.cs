@@ -1,7 +1,7 @@
 ﻿using NAV_Comment_tool.fileSplitter;
 using NAV_Comment_tool.saveTool;
-using NAV_Comment_tool.indentationChecker;
 using NAV_Comment_tool.modificationSearchTool;
+using NAV_Comment_tool.indentationChecker;
 
 namespace NAV_Comment_tool
 {

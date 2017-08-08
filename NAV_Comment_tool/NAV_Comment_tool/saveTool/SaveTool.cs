@@ -28,7 +28,7 @@ namespace NAV_Comment_tool.saveTool
 
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {
-                if(chg.ChangeType != "Field")
+                if(chg.ChangeType == "Code")
                 {
                     File.AppendAllText(modPath + @"\Modification " + chg.ChangelogCode + " list.txt", "Source object: " + chg.SourceObject + Environment.NewLine);
                     File.AppendAllText(modPath + @"\Modification " + chg.ChangelogCode + " list.txt", "Change location: " + chg.Location + Environment.NewLine + Environment.NewLine);

@@ -72,15 +72,16 @@ namespace NAV_Comment_tool.saveTool
                         foreach (string item in ChangeCheck.GetModyficationList(obj.Contents))
                         {
                             int actionCounter = 0;
+                            obj.Changelog.Add(new ChangeClass("231", "ekszyn", "Action", "ekszyn", "ekszyn"));
                             writer.WriteLine("      #" + item + "#");
                             foreach (ChangeClass change in obj.Changelog)
                             {
-                                if (change.ChangelogCode == item)
+                                if (change.ChangelogCode == item && change.ChangeType != "Action")
                                 {
                                     writer.WriteLine("      - New " + change.ChangeType + ": " + change.Location);
                                 }
 
-                                if (change.ChangeType == "Action") actionCounter++;
+                                if (change.ChangeType == "Action" && change.ChangelogCode == item) actionCounter++;
                             }
 
                             if(actionCounter == 1)
