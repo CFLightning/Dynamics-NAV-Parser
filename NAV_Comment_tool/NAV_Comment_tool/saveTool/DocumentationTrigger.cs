@@ -72,7 +72,6 @@ namespace NAV_Comment_tool.saveTool
                         foreach (string item in ChangeCheck.GetModyficationList(obj.Contents))
                         {
                             int actionCounter = 0;
-                            obj.Changelog.Add(new ChangeClass("231", "ekszyn", "Action", "ekszyn", "ekszyn"));
                             writer.WriteLine("      #" + item + "#");
                             foreach (ChangeClass change in obj.Changelog)
                             {
@@ -92,7 +91,6 @@ namespace NAV_Comment_tool.saveTool
                             {
                                 writer.WriteLine("      - New Actions");
                             }
-                            
                         }
                         writing = false;
                     }
