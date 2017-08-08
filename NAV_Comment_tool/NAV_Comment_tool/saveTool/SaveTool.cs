@@ -23,7 +23,7 @@ namespace NAV_Comment_tool.saveTool
             DirectoryInfo directory = Directory.CreateDirectory(modPath);
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {
-                if (File.Exists(modPath + chg.ChangelogCode + " .txt")) File.Delete(modPath + chg.ChangelogCode + " .txt");
+                if (File.Exists(modPath + @"\Modification " + chg.ChangelogCode + " list.txt")) File.Delete(modPath + @"\Modification " + chg.ChangelogCode + " list.txt");
             }
 
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)

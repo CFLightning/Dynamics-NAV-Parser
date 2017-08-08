@@ -32,6 +32,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                     Regex endFlag = new Regex("");
                     ChangeClass change = new ChangeClass();
                     bool startFlag = false;
+                    int nesting = 0;
                     string trigger = "";
                     bool fieldsFlag = false;
                     string field = "";
@@ -57,17 +58,25 @@ namespace NAV_Comment_tool.modificationSearchTool
                         {
                             if (line.Contains(modtag) && endFlag.IsMatch(line)) //MAYBE SUBJECT TO CHANGES
                             {
-                                startFlag = false;
-                                if (builder.ToString() != "")
+                                if(nesting == 1)
                                 {
-                                    change = new ChangeClass(currentFlag, builder.ToString(), "Code", (fieldsFlag ? (field + " - " ) : "") + trigger, obj.Type + " " + obj.Number + " " + obj.Name);
-                                    ChangeClassRepository.AppendChange(change);
-                                    obj.Changelog.Add(change);
-                                }
+                                    startFlag = false;
+                                    if (builder.ToString() != "")
+                                    {
+                                        change = new ChangeClass(currentFlag, builder.ToString(), "Code", (fieldsFlag ? (field + " - ") : "") + trigger, obj.Type + " " + obj.Number + " " + obj.Name);
+                                        ChangeClassRepository.AppendChange(change);
+                                        obj.Changelog.Add(change);
+                                    }
 
-                                writer.Close();
-                                builder = new StringBuilder();
-                                writer = new StringWriter(builder);
+                                    writer.Close();
+                                    builder = new StringBuilder();
+                                    writer = new StringWriter(builder);
+                                }
+                                nesting--;
+                            }
+                            else if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//") && ChangeCheck.GetTagedModyfication(line) == modtag)
+                            {
+                                nesting++;
                             }
                             else
                             {
@@ -88,6 +97,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 {
                                     currentFlag = modtag;
                                     startFlag = true;
+                                    nesting++;
                                     endFlag = ChangeCheck.GetFittingEndPattern(line);
                                 }
                             }
