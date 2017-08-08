@@ -10,10 +10,14 @@ namespace NAV_Comment_tool.fileSplitter
         static Regex[] tagPatterns;
         static List<Regex[]> tagPairPattern;
         static string modNo;
+        static string prefix;
+        static string endSymbol;
 
         static ChangeCheck()
         {
             modNo = @"(?<mod>[A-Z0-9\._-]+)";
+            prefix = @"(IT/)?";
+            endSymbol = @"($| )";
             tagPatterns = new Regex[3];
             tagPairPattern = new List<Regex[]>();
             DefinePatternsNEW();
@@ -27,22 +31,20 @@ namespace NAV_Comment_tool.fileSplitter
             string lineBackComment = @" *[^\s/{2}]+.*// *";    // OTHER .*\S+.\
 
             List<Regex[]> PatternList = new List<Regex[]>();
-            
+
             List<string> beginPatternParts = new List<string>();
-            beginPatternParts.Add(@"<-+ *(IT/)?" + modNo + @"($| )");
-            //beginPatternParts.Add(@"-+< *(IT/)?" + modNo);
-            beginPatternParts.Add(@"(IT/)?" + modNo + " *begin($| )");
-            beginPatternParts.Add(@"(IT/)?" + modNo + " */S($| )");
+            beginPatternParts.Add(@"<-+ *" + prefix + modNo + endSymbol);
+            beginPatternParts.Add(prefix + modNo + @" *begin" + endSymbol);
+            beginPatternParts.Add(prefix + modNo + @" */S" + endSymbol);
 
             List<string> endPatternParts = new List<string>();
-            endPatternParts.Add(@"-+> *(IT/)?" + modNo + @"($| )");
-            //endPatternParts.Add(@">-+ *(IT/)?" + modNo + "");
-            endPatternParts.Add(@"(IT/)?" + modNo + " *end($| )");
-            endPatternParts.Add(@"(IT/)?" + modNo + " */E($| )");
+            endPatternParts.Add(@"-+> *(IT/)?" + modNo + endSymbol);
+            endPatternParts.Add(prefix + modNo + @" *end" + endSymbol);
+            endPatternParts.Add(prefix + modNo + @" */E" + endSymbol);
 
             List<string> otherPatternParts = new List<string>();
-            otherPatternParts.Add(@"(IT/)?" + modNo + @" [^A-Z0-9\.]*$");
-            otherPatternParts.Add(@"(IT/)?" + modNo + @" */S/E$");
+            otherPatternParts.Add(prefix + modNo + @" *$");
+            otherPatternParts.Add(prefix + modNo + @" */S/E$");
 
             Regex rgxBegin, rgxEnd, rgxOther;
             Regex[] rgxPair;
@@ -73,7 +75,7 @@ namespace NAV_Comment_tool.fileSplitter
             rgxBegin = new Regex(beginPattern);
             rgxEnd = new Regex(endPattern);
             rgxOther = new Regex(otherPattern);
-            
+
             tagPatterns[(int)Marks.BEGIN] = rgxBegin;
             tagPatterns[(int)Marks.END] = rgxEnd;
             tagPatterns[(int)Marks.OTHER] = rgxOther;
@@ -164,7 +166,7 @@ namespace NAV_Comment_tool.fileSplitter
                     //Console.WriteLine(tag);
                 }
             }
-            
+
             return modList;
         }
 
@@ -231,7 +233,3 @@ namespace NAV_Comment_tool.fileSplitter
         }
     }
 }
-
-//string path = @"C:\Users\Administrator\Documents\export\18cust.txt";
-//string[] objectTextLines = System.IO.File.ReadAllText(path).Replace("\r", "").Split('\n');
-//string[] txt = ChangeCheck.GetModyficationList(objectTextLines).ToArray();
