@@ -23,7 +23,6 @@ namespace NAV_Comment_tool.modificationSearchTool
                     if(isFirstLine)
                     {
                         isFirstLine = false;
-                        //line = "FOUND FIRST LINE" + line;
                         firstLineIndent = line.Length - line.TrimStart(' ').Length;
                     }
                     if(line.Length > firstLineIndent)

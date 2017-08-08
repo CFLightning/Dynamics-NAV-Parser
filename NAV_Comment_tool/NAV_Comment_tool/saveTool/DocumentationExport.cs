@@ -1,13 +1,9 @@
 ﻿using NAV_Comment_tool.parserClass;
 using NAV_Comment_tool.repositories;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace NAV_Comment_tool.saveTool
 {
@@ -32,7 +28,6 @@ namespace NAV_Comment_tool.saveTool
 
                 if (Enum.TryParse(obj.Type, out result))
                 {
-                    //Console.WriteLine("1<next>{0}<next>{1}<next>#tagtagtag#<next> tresc", (int)result, obj.Name);
                     while (null != (line = reader.ReadLine()))
                     {
                         if (line.StartsWith("    BEGIN"))
@@ -80,7 +75,7 @@ namespace NAV_Comment_tool.saveTool
                                     tagLine = trimmer;
                                     isOneLine = true;
                                 }
-                                Console.WriteLine("{3}<next>{0}<next>{1}<next>{4}<next>{2}", (int)result, obj.Name, line, lineAmount, tagLine);
+                                Console.WriteLine("{0}<next>{1}<next>{2}<next>{3}<next>{4}", lineAmount, (int)result, obj.Name, tagLine, line);
                                 lineAmount++;
                                 if (isOneLine)
                                 {
