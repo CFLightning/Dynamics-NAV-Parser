@@ -31,17 +31,17 @@ namespace NAV_Comment_tool.fileSplitter
             List<string> beginPatternParts = new List<string>();
             beginPatternParts.Add(@"<-+ *(IT/)?" + modNo + @"($| )");
             //beginPatternParts.Add(@"-+< *(IT/)?" + modNo);
-            beginPatternParts.Add(@"(IT/)?" + modNo + " *begin");
-            beginPatternParts.Add(@"(IT/)?" + modNo + " */S");
+            beginPatternParts.Add(@"(IT/)?" + modNo + " *begin($| )");
+            beginPatternParts.Add(@"(IT/)?" + modNo + " */S($| )");
 
             List<string> endPatternParts = new List<string>();
             endPatternParts.Add(@"-+> *(IT/)?" + modNo + @"($| )");
             //endPatternParts.Add(@">-+ *(IT/)?" + modNo + "");
-            endPatternParts.Add(@"(IT/)?" + modNo + " *end");
-            endPatternParts.Add(@"(IT/)?" + modNo + " */E");
+            endPatternParts.Add(@"(IT/)?" + modNo + " *end($| )");
+            endPatternParts.Add(@"(IT/)?" + modNo + " */E($| )");
 
             List<string> otherPatternParts = new List<string>();
-            otherPatternParts.Add(@"" + modNo + @"([^A-Z0-9\.]*$)");
+            otherPatternParts.Add(@"" + modNo + @" [^A-Z0-9\.]*$");
 
             Regex rgxBegin, rgxEnd, rgxOther;
             Regex[] rgxPair;
@@ -187,7 +187,8 @@ namespace NAV_Comment_tool.fileSplitter
         static public List<string> GetModyficationList(string code)
         {
             string[] codeLines = code.Replace("\r", "").Split('\n');
-            return FindModsInTags(FindTags(codeLines)).Union(GetFieldDescriptionTagList(code)).ToList();
+            List<string> ret = FindModsInTags(FindTags(codeLines));
+            return ret.Union(GetFieldDescriptionTagList(code)).ToList();
         }
 
         static public List<string> GetTagList(string code)
