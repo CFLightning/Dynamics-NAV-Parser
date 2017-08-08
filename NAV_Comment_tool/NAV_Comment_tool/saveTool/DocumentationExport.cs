@@ -13,11 +13,15 @@ namespace NAV_Comment_tool.saveTool
 {
     class DocumentationExport
     {
-        enum Types { Table=1, Page=3, Codeunit }; // Add actual numbers for each of the parameters
+        enum Types { TableData, Table, Form, Report, Dataport, Codeunit, XMLport, MenuSuite, Page }; // Add actual numbers for each of the parameters
 
         public static bool GenerateDocumentationFile()
         {
             Types result;
+            int lineAmount = 1;
+            
+            Regex lineChecker = new Regex(".*#.*#.*");
+            Regex blockChecker = new Regex(".*#.*#$");
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 StringReader reader = new StringReader(obj.Contents);
@@ -25,9 +29,7 @@ namespace NAV_Comment_tool.saveTool
                 StringWriter writer = new StringWriter(builder);
                 bool bracketFlag = false, beginFlag = false, writing = false, isOneLine = false, documentationPrompt = false;
                 string line, tagLine = "", trimmer;
-                Regex lineChecker = new Regex(".*#.*#.*");
-                Regex blockChecker = new Regex(".*#.*#$");
-                int lineAmount = 1;
+
                 if (Enum.TryParse(obj.Type, out result))
                 {
                     //Console.WriteLine("1<next>{0}<next>{1}<next>#tagtagtag#<next> tresc", (int)result, obj.Name);
