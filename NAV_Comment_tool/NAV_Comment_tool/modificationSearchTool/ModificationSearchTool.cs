@@ -29,6 +29,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                     StringWriter writer = new StringWriter(builder);
                     string line, currentFlag = null; //MAYBE SUBJECT TO CHANGES
                     Regex endFlag = new Regex("");
+                    string nestedFlag = "";
                     //Regex[] endFlags = new Regex[3];
                     ChangeClass change = new ChangeClass();
                     bool startFlag = false;
@@ -74,7 +75,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 }
                                 nesting--; // NESTING DODANE <-----
                             }
-                            else if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//") && ChangeCheck.GetTagedModyfication(line) == modtag)
+                            else if (line.Contains(nestedFlag))
                             {
                                 nesting++; // DODANE <-----
                             }
@@ -99,6 +100,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                     startFlag = true;
                                     nesting++; // ZMIENIONE <-----
                                     endFlag = ChangeCheck.GetFittingEndPattern(line);
+                                    nestedFlag = line.Trim(' ');
                                 }
                             }
                             else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
