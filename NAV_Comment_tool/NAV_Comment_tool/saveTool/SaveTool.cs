@@ -17,6 +17,7 @@ namespace NAV_Comment_tool.saveTool
             }
             return true;
         }
+
         public static bool SaveChangesToFiles(string path)
         {
             string modPath = path + "Modifications";
@@ -36,6 +37,12 @@ namespace NAV_Comment_tool.saveTool
                     File.AppendAllText(modPath + @"\Modification " + chg.ChangelogCode + " list.txt", Environment.NewLine + Environment.NewLine);
                 }
             }
+            return true;
+        }
+
+        public static bool SaveDocumentationToFile(string path, string documentation)
+        {
+            File.WriteAllText(path + @"Documentation .txt", documentation);
             return true;
         }
     }

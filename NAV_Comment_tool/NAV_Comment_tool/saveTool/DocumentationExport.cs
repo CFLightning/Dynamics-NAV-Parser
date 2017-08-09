@@ -11,19 +11,21 @@ namespace NAV_Comment_tool.saveTool
     {
         enum Types { TableData, Table, Form, Report, Dataport, Codeunit, XMLport, MenuSuite, Page }; // Add actual numbers for each of the parameters
 
-        public static bool GenerateDocumentationFile()
+        public static string GenerateDocumentationFile()
         {
             Types result;
             int lineAmount = 1;
             
             Regex lineChecker = new Regex(".*#.*#.*");
             Regex blockChecker = new Regex(".*#.*#$");
+            string documentation = "";
+            
+            StringBuilder builder = new StringBuilder();
+            StringWriter writer = new StringWriter(builder);
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 StringReader reader = new StringReader(obj.Contents);
-                StringBuilder builder = new StringBuilder();
-                StringWriter writer = new StringWriter(builder);
-                bool bracketFlag = false, beginFlag = false, writing = false, isOneLine = false, documentationPrompt = false;
+                bool bracketFlag = false, beginFlag = false, writing = false, isOneLine = false;//, documentationPrompt = false;
                 string line, tagLine = "", trimmer;
 
                 if (Enum.TryParse(obj.Type, out result))
@@ -37,7 +39,7 @@ namespace NAV_Comment_tool.saveTool
 
                         if (line.StartsWith("      Automated Documentation"))
                         {
-                            documentationPrompt = true;
+                            //documentationPrompt = true;
                             writing = true;
                             continue;
                         }
@@ -75,6 +77,7 @@ namespace NAV_Comment_tool.saveTool
                                     tagLine = trimmer;
                                     isOneLine = true;
                                 }
+                                writer.WriteLine("{0}<next>{1}<next>{2}<next>{3}<next>{4}", lineAmount, (int)result, obj.Name, tagLine, line);
                                 Console.WriteLine("{0}<next>{1}<next>{2}<next>{3}<next>{4}", lineAmount, (int)result, obj.Name, tagLine, line);
                                 lineAmount++;
                                 if (isOneLine)
@@ -87,7 +90,8 @@ namespace NAV_Comment_tool.saveTool
                     }
                 }
             }
-            return true;
+            documentation = builder.ToString();
+            return documentation;
         }
     }
 }
