@@ -12,10 +12,17 @@ namespace NAV_Comment_tool
         {
             Console.WriteLine("Checking path, splitting files");
 
+<<<<<<< HEAD
             //string path = @"C:\Users\Administrator\Documents\GIt\NAV_Comment_tool\NAV_Comment_tool\TEMP\";
             //FileSplitter.SplitFile(path + "Object.txt");
             string path = @"C:\Users\Administrator\Documents\Exported example objects\";
             FileSplitter.SplitFile(path + "ExportedObjectsNAV.txt"); // TODO: Change hardcoded path to dynamically chosen one
+=======
+            string path = @"C:\Users\Administrator\Documents\GIt\NAV_Comment_tool\NAV_Comment_tool\TEMP\";
+            FileSplitter.SplitFile(path + @"All.txt");
+            //string path = @"C:\Users\Administrator\Documents\Exported example objects\";
+            //FileSplitter.SplitFile(path + "ObjectsFull.txt"); // TODO: Change hardcoded path to dynamically chosen one
+>>>>>>> 489f030227de77be0bce5aa37321eea70beff0b7
 
             Console.WriteLine("Fixing indentations");
             IndentationChecker.CheckIndentations();
