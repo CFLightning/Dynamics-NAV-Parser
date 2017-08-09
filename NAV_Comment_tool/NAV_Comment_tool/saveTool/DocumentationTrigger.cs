@@ -51,7 +51,7 @@ namespace NAV_Comment_tool.saveTool
                         line = UpdateVersionList(line, obj);
                     writer.WriteLine(line);
                 }
-
+                writer.WriteLine(line);
                 while (null != (line = reader.ReadLine()))
                 {
                     if (line.StartsWith("    BEGIN"))

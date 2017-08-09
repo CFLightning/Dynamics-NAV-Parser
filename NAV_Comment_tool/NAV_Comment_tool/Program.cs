@@ -12,8 +12,8 @@ namespace NAV_Comment_tool
         {
             Console.WriteLine("Checking path, splitting files");
 
-            //string path = @"C:\Users\Administrator\Documents\Exported example objects\";
-            //FileSplitter.SplitFile(path + "ExportedObjectsNAV.txt"); // TODO: Change hardcoded path to dynamically chosen one
+            string path = @"C:\Users\Administrator\Documents\Exported example objects\";
+            FileSplitter.SplitFile(path + "ExportedObjectsNAV.txt"); // TODO: Change hardcoded path to dynamically chosen one
             //string path = @"C:\Users\Administrator\Documents\GIt\NAV_Comment_tool\NAV_Comment_tool\TEMP\";
             //FileSplitter.SplitFile(path + @"All.txt");
 
