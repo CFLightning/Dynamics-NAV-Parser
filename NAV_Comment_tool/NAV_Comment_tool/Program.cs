@@ -16,7 +16,7 @@ namespace NAV_Comment_tool
             //FileSplitter.SplitFile(path + "ExportedObjectsNAV.txt"); // TODO: Change hardcoded path to dynamically chosen one
             //string path = @"C:\Users\Administrator\Documents\GIt\NAV_Comment_tool\NAV_Comment_tool\TEMP\";
             //FileSplitter.SplitFile(path + @"All.txt");
-
+            
             Console.WriteLine("Fixing indentations");
             IndentationChecker.CheckIndentations();
             Console.WriteLine("Looking for modifications");
