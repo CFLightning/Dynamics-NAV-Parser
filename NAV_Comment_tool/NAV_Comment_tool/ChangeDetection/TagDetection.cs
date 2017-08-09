@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace NAV_Comment_tool.fileSplitter
 {
-    public static class ChangeCheck
+    public static class TagDetection
     {
         static Regex[] tagPatterns;
         static List<Regex[]> tagPairPattern;
@@ -13,7 +13,7 @@ namespace NAV_Comment_tool.fileSplitter
         static string prefix;
         static string endSymbol;
 
-        static ChangeCheck()
+        static TagDetection()
         {
             modNo = @"(?<mod>[A-Z0-9\._-]+)";
             prefix = @"(IT/)?";
@@ -210,17 +210,6 @@ namespace NAV_Comment_tool.fileSplitter
             bool fieldFlag = false, actionFlag = false, controlFlag = false;
             while (i < codeLines.Length - 1)
             {
-                //while (!FieldDetection.DetectIfFieldsStartFlag(codeLines[i])  && i < codeLines.Length - 1)
-                //    i++;
-                //while (!FieldDetection.DetectIfFieldsEndFlag(codeLines[i]) && i < codeLines.Length - 1)
-                //{
-                //    if (codeLines[i].Contains("Description="))
-                //    {
-                //        string fieldDescription = ChangeDetection.FieldDetection.GetDescription(codeLines[i]);
-                //        tagList.AddRange(fieldDescription.Split(',').ToList());
-                //    }
-                //    i++;
-                //}
                 if (!fieldFlag && FlagDetection.DetectIfFieldsStartFlag(codeLines[i]))
                     fieldFlag = true;
                 else if (!actionFlag && FlagDetection.DetectIfActionStartFlag(codeLines[i]))

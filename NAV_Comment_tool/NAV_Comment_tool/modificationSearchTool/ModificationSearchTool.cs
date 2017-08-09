@@ -14,7 +14,7 @@ namespace NAV_Comment_tool.modificationSearchTool
 
         public static void InitTags(ObjectClass obj)
         {
-            tags = ChangeCheck.GetModyficationList(obj.Contents);
+            tags = TagDetection.GetModyficationList(obj.Contents);
         }
 
         public static bool FindAndSaveChanges()
@@ -100,18 +100,18 @@ namespace NAV_Comment_tool.modificationSearchTool
                         {
                             if (line.Contains(modtag) && !(line.StartsWith("Description=")) && !(line.Contains("Version List=")) && line.Contains(@"//"))
                             {
-                                if (ChangeCheck.CheckIfTagsIsAlone(line))
+                                if (TagDetection.CheckIfTagsIsAlone(line))
                                 {
                                     change = new ChangeClass(modtag, line, "Code", trigger, obj.Type + " " + obj.Number + " " + obj.Name);
                                     ChangeClassRepository.AppendChange(change);
                                     obj.Changelog.Add(change);
                                 }
-                                else if(ChangeCheck.GetTagedModyfication(line) == modtag)
+                                else if(TagDetection.GetTagedModyfication(line) == modtag)
                                 {
                                     currentFlag = modtag;
                                     startFlag = true;
                                     nesting++; // ZMIENIONE <-----
-                                    endFlag = ChangeCheck.GetFittingEndPattern(line);
+                                    endFlag = TagDetection.GetFittingEndPattern(line);
                                     nestedFlag = line.Trim(' ');
                                 }
                             }

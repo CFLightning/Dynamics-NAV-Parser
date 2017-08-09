@@ -60,7 +60,7 @@ namespace NAV_Comment_tool.saveTool
                     if(line.StartsWith("      #") && documentationPrompt)
                     {
                         deleteFlag = false;
-                        foreach (string item in ChangeCheck.GetModyficationList(obj.Contents))
+                        foreach (string item in TagDetection.GetModyficationList(obj.Contents))
                         {
                             if (line.Contains(item)) deleteFlag = true;
                         }
@@ -69,7 +69,7 @@ namespace NAV_Comment_tool.saveTool
                     if (writing)
                     {
                         if(!(documentationPrompt)) writer.WriteLine(Environment.NewLine + "      Automated Documentation");
-                        foreach (string item in ChangeCheck.GetModyficationList(obj.Contents))
+                        foreach (string item in TagDetection.GetModyficationList(obj.Contents))
                         {
                             int actionCounter = 0;
                             writer.WriteLine("      #" + item + "#");

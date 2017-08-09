@@ -6,14 +6,10 @@ namespace NAV_Comment_tool.ChangeDetection
     class FlagDetection
     {
         static Regex rgxField;
-        //static Regex rgxAction;
-        //static Regex rgxControl;
 
         static FlagDetection()
         {
-            rgxField = new Regex(@"^\s*{[^;]*;[^;]*;(?<FieldName>[^;]*)\s*;[^;]*;.*=");
-            //rgxAction = new Regex(@"^\s*{[^;]*;[^;]*;Action\s*;$");
-            //rgxControl = new Regex(@"^\s*{[^;]*;[^;]*;Field\s*;$");
+            rgxField = new Regex(@"^\s*{[^;]*;[^;]*;(?<FieldName>[^;]*)\s*;([^;]*;)?(.*=)?.*$");
         }
 
         static public bool DetectIfNextFieldFlag(string codeLine)
@@ -43,11 +39,6 @@ namespace NAV_Comment_tool.ChangeDetection
                 return false;
         }
 
-        //static public bool DetectIfNextActionFlag(string codeLine)
-        //{
-        //    return rgxAction.IsMatch(codeLine);
-        //}
-
         static public bool DetectIfActionStartFlag(string codeLine)
         {
             if (codeLine == "    ActionList=ACTIONS")
@@ -63,11 +54,6 @@ namespace NAV_Comment_tool.ChangeDetection
             else
                 return false;
         }
-
-        //static public bool DetectIfNextControlFlag(string codeLine)
-        //{
-        //    return rgxControl.IsMatch(codeLine);
-        //}
 
         static public bool DetectIfControlStartFlag(string codeLine)
         {
