@@ -25,6 +25,7 @@ namespace NAV_Comment_tool
             ModificationCleanerTool.CleanChangeCode();
             Console.WriteLine("Generating Documentation() trigger");
             DocumentationTrigger.UpdateDocumentationTrigger();
+
             Console.WriteLine("Saving objects");
             SaveTool.SaveObjectsToFiles(path);
             Console.WriteLine("Saving changelogs");
