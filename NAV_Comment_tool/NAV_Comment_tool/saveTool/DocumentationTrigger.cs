@@ -36,6 +36,12 @@ namespace NAV_Comment_tool.saveTool
                         beginFlag = true;
                     }
 
+                    //if (line.StartsWith("    END.") && bracketFlag == false && beginFlag)
+                    //{
+                    //    writing = true;
+                    //    continue;
+                    //}
+
                     if (line.StartsWith("    {") && beginFlag)
                     {
                         bracketFlag = true;
@@ -68,7 +74,7 @@ namespace NAV_Comment_tool.saveTool
 
                     if (writing)
                     {
-                        if(!(documentationPrompt)) writer.WriteLine(Environment.NewLine + "      Automated Documentation");
+                        if(!(documentationPrompt) && obj.Changelog.Count > 0) writer.WriteLine(Environment.NewLine + "      Automated Documentation");
                         foreach (string item in TagDetection.GetModyficationList(obj.Contents))
                         {
                             int actionCounter = 0;
