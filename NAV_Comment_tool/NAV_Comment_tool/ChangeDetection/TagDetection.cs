@@ -206,19 +206,45 @@ namespace NAV_Comment_tool.fileSplitter
             List<string> tagList = new List<string>();
 
             int i = 0;
+
+            bool fieldFlag = false, actionFlag = false, controlFlag = false;
             while (i < codeLines.Length - 1)
             {
-                while (!FieldDetection.DetectIfFieldsStartFlag(codeLines[i]) && i < codeLines.Length - 1)
-                    i++;
-                while (!FieldDetection.DetectIfFieldsEndFlag(codeLines[i]) && i < codeLines.Length - 1)
-                {
-                    if (codeLines[i].Contains("Description="))
+                //while (!FieldDetection.DetectIfFieldsStartFlag(codeLines[i])  && i < codeLines.Length - 1)
+                //    i++;
+                //while (!FieldDetection.DetectIfFieldsEndFlag(codeLines[i]) && i < codeLines.Length - 1)
+                //{
+                //    if (codeLines[i].Contains("Description="))
+                //    {
+                //        string fieldDescription = ChangeDetection.FieldDetection.GetDescription(codeLines[i]);
+                //        tagList.AddRange(fieldDescription.Split(',').ToList());
+                //    }
+                //    i++;
+                //}
+                if (!fieldFlag && FlagDetection.DetectIfFieldsStartFlag(codeLines[i]))
+                    fieldFlag = true;
+                else if (!actionFlag && FlagDetection.DetectIfActionStartFlag(codeLines[i]))
+                    actionFlag = true;
+                else if (!controlFlag && FlagDetection.DetectIfControlStartFlag(codeLines[i]))
+                    controlFlag = true;
+                
+                if (fieldFlag && FlagDetection.DetectIfFieldsEndFlag(codeLines[i]))
+                    fieldFlag = true;
+                else if (actionFlag && FlagDetection.DetectIfActionEndFlag(codeLines[i]))
+                    actionFlag = true;
+                else if (controlFlag && FlagDetection.DetectIfControlEndFlag(codeLines[i]))
+                    controlFlag = true;
+
+                if (fieldFlag || actionFlag || controlFlag)
                     {
-                        string fieldDescription = ChangeDetection.FieldDetection.GetFieldDescription(codeLines[i]);
-                        tagList.AddRange(fieldDescription.Split(',').ToList());
+                        if (codeLines[i].Contains("Description="))
+                        {
+                            string fieldDescription = ChangeDetection.FlagDetection.GetDescription(codeLines[i]);
+                            tagList.AddRange(fieldDescription.Split(',').ToList());
+                        }
                     }
-                    i++;
-                }
+
+                i++;
             }
 
             List<string> modList = new List<string>();

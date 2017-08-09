@@ -35,27 +35,39 @@ namespace NAV_Comment_tool.modificationSearchTool
                     bool startFlag = false;
                     int nesting = 0;
                     string trigger = "";
-                    bool fieldsFlag = false;
-                    string field = "";
+                    bool fieldFlag = false, actionFlag = false, controlFlag = false, openControlFlag = false;
+                    string fieldName = "", sourceExpr = "", description = "";
 
                     while (null != (line = reader.ReadLine()))
                     {
                         if (ChangeDetection.TriggerDetection.DetectIfAnyTriggerInLine(line))
                             trigger = ChangeDetection.TriggerDetection.GetTriggerName(line);
-                        
-                        if (fieldsFlag == false && ChangeDetection.FieldDetection.DetectIfFieldsStartFlag(line))
-                            fieldsFlag = true;
 
-                        if (fieldsFlag == true && ChangeDetection.FieldDetection.DetectIfNextFieldFlag(line))
-                            field = ChangeDetection.FieldDetection.GetNextFieldName(line);
-
-                        if (fieldsFlag == true && ChangeDetection.FieldDetection.DetectIfFieldsEndFlag(line))
+                        // Flags
+                        if (obj.Type == "Table")
                         {
-                            field = "";
-                            fieldsFlag = false;
+                            if (fieldFlag == false && ChangeDetection.FlagDetection.DetectIfFieldsStartFlag(line))
+                                fieldFlag = true;
+                            else if (fieldFlag == true && ChangeDetection.FlagDetection.DetectIfFieldsEndFlag(line))
+                                fieldFlag = false;
+                            else if (fieldFlag == true && ChangeDetection.FlagDetection.DetectIfNextFieldFlag(line))
+                                fieldName = ChangeDetection.FlagDetection.GetNextFieldName(line);
+
+                        }
+                        else if (obj.Type == "Page")
+                        {
+                            if (actionFlag == false && ChangeDetection.FlagDetection.DetectIfActionStartFlag(line))
+                                actionFlag = true;
+                            else if (actionFlag == true && ChangeDetection.FlagDetection.DetectIfActionEndFlag(line))
+                            {
+                                actionFlag = false;
+                                controlFlag = true;
+                            }
+                            else if (controlFlag == true && ChangeDetection.FlagDetection.DetectIfControlEndFlag(line))
+                                controlFlag = false;
                         }
 
-                        if (startFlag == true)
+                    if (startFlag == true)
                         {
                             if (line.Contains(modtag) && endFlag.IsMatch(line)) //Problem jest ze strzałkami i zagnieżdżeniami !
                             {
@@ -64,7 +76,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                     startFlag = false;
                                     if (builder.ToString() != "")
                                     {
-                                        change = new ChangeClass(currentFlag, builder.ToString(), "Code", (fieldsFlag ? (field + " - ") : "") + trigger, obj.Type + " " + obj.Number + " " + obj.Name);
+                                        change = new ChangeClass(currentFlag, builder.ToString(), "Code", (fieldFlag ? (fieldName + " - ") : "") + trigger, obj.Type + " " + obj.Number + " " + obj.Name);
                                         ChangeClassRepository.AppendChange(change);
                                         obj.Changelog.Add(change);
                                     }
@@ -103,13 +115,48 @@ namespace NAV_Comment_tool.modificationSearchTool
                                     nestedFlag = line.Trim(' ');
                                 }
                             }
-                            else if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
+                            else if (obj.Type == "Table")
                             {
-                                string fieldContent = ChangeDetection.FieldDetection.GetFieldDescription(line);
-                                change = new ChangeClass(modtag, fieldContent, "Field", field, obj.Type + " " + obj.Number + " " + obj.Name);
-                                ChangeClassRepository.AppendChange(change);
-                                obj.Changelog.Add(change);
+                                if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
+                                {
+                                    string fieldContent = ChangeDetection.FlagDetection.GetDescription(line);
+                                    change = new ChangeClass(modtag, fieldContent, "Field", fieldName, obj.Type + " " + obj.Number + " " + obj.Name);
+                                    ChangeClassRepository.AppendChange(change);
+                                    obj.Changelog.Add(change);
+                                }
                             }
+                            else if (obj.Type == "Page")
+                            {
+                                if (actionFlag)
+                                {
+                                    if (line.Contains(modtag) && line.Contains("Description="))
+                                    {
+                                        description = ChangeDetection.FlagDetection.GetDescription(line);
+                                        change = new ChangeClass(modtag, "", "Action", "", "");
+                                        ChangeClassRepository.AppendChange(change);
+                                        obj.Changelog.Add(change);
+                                    }
+                                }
+                                else if (controlFlag)
+                                {
+                                    if (line.Contains(modtag) && line.Contains("Description="))
+                                    {
+                                        description = ChangeDetection.FlagDetection.GetDescription(line);
+                                        openControlFlag = true;
+                                    }
+                                    else if (openControlFlag && line.Contains("SourceExpr="))
+                                    {
+                                        sourceExpr = ChangeDetection.FlagDetection.GetSourceExpr(line);
+                                        change = new ChangeClass(modtag, "", "Control", sourceExpr, "");
+                                        ChangeClassRepository.AppendChange(change);
+                                        obj.Changelog.Add(change);
+                                        openControlFlag = false;
+                                    }
+                                }
+                                
+                            }
+                            
+                            
                         }
                     }
                 }

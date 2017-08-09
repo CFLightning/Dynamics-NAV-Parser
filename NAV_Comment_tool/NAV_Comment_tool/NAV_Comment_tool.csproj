@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeDetection\TagDetection.cs" />
-    <Compile Include="ChangeDetection\FieldDetection.cs" />
+    <Compile Include="ChangeDetection\FlagDetection.cs" />
     <Compile Include="ChangeDetection\TriggerDetection.cs" />
     <Compile Include="fileSplitter\ExtractObjectParts.cs" />
     <Compile Include="fileSplitter\FileSplitter.cs" />
