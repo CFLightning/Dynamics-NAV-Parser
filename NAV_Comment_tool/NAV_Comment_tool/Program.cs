@@ -11,7 +11,7 @@ namespace NAV_Comment_tool
         {
 
             string path = @"C:\Users\Administrator\Documents\GIt\NAV_Comment_tool\NAV_Comment_tool\TEMP\";
-            FileSplitter.SplitFile(path + "Object.txt");
+            FileSplitter.SplitFile(path + "All.txt");
             //string path = @"C:\Users\Administrator\Documents\Exported example objects\";
             //FileSplitter.SplitFile(path + "Objects.txt"); // TODO: Change hardcoded path to dynamically chosen one
             IndentationChecker.CheckIndentations();

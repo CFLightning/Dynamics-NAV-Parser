@@ -34,13 +34,13 @@ namespace NAV_Comment_tool.fileSplitter
 
             List<string> beginPatternParts = new List<string>();
             beginPatternParts.Add(@"<-+ *" + prefix + modNo + endSymbol);
-            beginPatternParts.Add(prefix + modNo + @" *begin" + endSymbol);
-            beginPatternParts.Add(prefix + modNo + @" */S" + endSymbol);
+            beginPatternParts.Add(prefix + modNo + @" *begin." + endSymbol);
+            beginPatternParts.Add(prefix + modNo + @" */S." + endSymbol);
 
             List<string> endPatternParts = new List<string>();
             endPatternParts.Add(@"-+> *" + prefix + modNo + endSymbol);
-            endPatternParts.Add(prefix + modNo + @" * end" + endSymbol);
-            endPatternParts.Add(prefix + modNo + @" */E" + endSymbol);
+            endPatternParts.Add(prefix + modNo + @" * end." + endSymbol);
+            endPatternParts.Add(prefix + modNo + @" */E." + endSymbol);
 
             List<string> otherPatternParts = new List<string>();
             otherPatternParts.Add(prefix + modNo + @" *$");
@@ -163,7 +163,6 @@ namespace NAV_Comment_tool.fileSplitter
                 if (!modList.Contains(tag))
                 {
                     modList.Add(tag);
-                    //Console.WriteLine(tag);
                 }
             }
 
@@ -229,10 +228,10 @@ namespace NAV_Comment_tool.fileSplitter
                         if (codeLines[i].Contains("Description="))
                         {
                             string fieldDescription = ChangeDetection.FlagDetection.GetDescription(codeLines[i]);
+                            fieldDescription = fieldDescription.Replace("IT/", "");
                             tagList.AddRange(fieldDescription.Split(',').ToList());
                         }
                     }
-
                 i++;
             }
 
