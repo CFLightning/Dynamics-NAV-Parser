@@ -4,6 +4,8 @@ using NAV_Comment_tool.repositories;
 using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NAV_Comment_tool.saveTool
 {
@@ -19,6 +21,20 @@ namespace NAV_Comment_tool.saveTool
          *      itd....
          */
 
+
+        private static string UpdateVersionList(string codeLine, ObjectClass obj)
+        {
+            List<string> versionList = new List<string>();
+            versionList = codeLine.Substring(codeLine.IndexOf('=') + 1).Split(',').ToList();
+            versionList[versionList.Count - 1] = versionList.Last().Substring(0, versionList.Last().Length - 1);
+            versionList = versionList.Union(TagDetection.GetModyficationList(obj.Contents)).ToList();
+
+            string versionString = codeLine.Remove(codeLine.IndexOf("=") + 1);
+            versionString += string.Join(",", versionList.ToArray()) + ";";
+
+            return versionString;
+        }
+
         public static bool UpdateDocumentationTrigger()
         {
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
@@ -28,6 +44,13 @@ namespace NAV_Comment_tool.saveTool
                 StringWriter writer = new StringWriter(builder);
                 string line;
                 bool bracketFlag = false, beginFlag = false, writing = false, documentationPrompt = false, deleteFlag = false, addBrackets = false, bracketsExist = false;
+
+                while (null != (line = reader.ReadLine()) && line != "  PROPERTIES")
+                {
+                    if (line.Contains("Version List="))
+                        line = UpdateVersionList(line, obj);
+                    writer.WriteLine(line);
+                }
 
                 while (null != (line = reader.ReadLine()))
                 {
