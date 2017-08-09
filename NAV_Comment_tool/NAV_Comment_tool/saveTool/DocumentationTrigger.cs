@@ -29,10 +29,14 @@ namespace NAV_Comment_tool.saveTool
             versionList[versionList.Count - 1] = versionList.Last().Substring(0, versionList.Last().Length - 1);
             versionList = versionList.Union(TagDetection.GetModyficationList(obj.Contents)).ToList();
 
-            string versionString = codeLine.Remove(codeLine.IndexOf("=") + 1);
-            versionString += string.Join(",", versionList.ToArray()) + ";";
-
-            return versionString;
+            string versionString = string.Join(",", versionList.ToArray());
+            if (versionString.Length >= 248)
+            {
+                versionString = versionString.Remove(0, versionString.Length - (247));
+                versionString = versionString.Remove(0, versionString.IndexOf(','));
+                versionString = versionString.Insert(0, "~");
+            }
+            return "    Version List=" + versionString + ";";
         }
 
         public static bool UpdateDocumentationTrigger()
