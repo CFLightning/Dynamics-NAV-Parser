@@ -128,8 +128,26 @@ namespace NAV_Comment_tool.saveTool
                             {
                                 if (change.ChangelogCode == item && change.ChangeType != "Action" && !(locationList.Exists(loc => loc == change.Location)))
                                 {
-                                    locationList.Add(change.Location);
-                                    writer.WriteLine("      - New " + change.ChangeType + ": " + change.Location);
+                                    
+                                    if(change.ChangeType == "Field")
+                                    {
+                                        int fieldNum = Int32.Parse(change.Contents);
+                                        if(fieldNum <= 50000 || fieldNum >= 99999)
+                                        {
+                                            locationList.Add(change.Location);
+                                            writer.WriteLine("      - Changed " + change.ChangeType + ": " + change.Location);
+                                        }
+                                        else
+                                        {
+                                            locationList.Add(change.Location);
+                                            writer.WriteLine("      - New " + change.ChangeType + ": " + change.Location);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        locationList.Add(change.Location);
+                                        writer.WriteLine("      - New " + change.ChangeType + ": " + change.Location);
+                                    }
                                 }
 
                                 if (change.ChangeType == "Action" && change.ChangelogCode == item) actionCounter++;

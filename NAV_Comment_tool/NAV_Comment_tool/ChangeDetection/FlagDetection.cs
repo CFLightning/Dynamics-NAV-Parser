@@ -9,7 +9,7 @@ namespace NAV_Comment_tool.ChangeDetection
 
         static FlagDetection()
         {
-            rgxField = new Regex(@"^\s*{[^;]*;[^;]*;(?<FieldName>[^;]*)\s*;([^;]*;)?(.*=)?.*$");
+            rgxField = new Regex(@"^\s*{(?<FieldNumber>[^;]*);[^;]*;(?<FieldName>[^;]*)\s*;([^;]*;)?(.*=)?.*$");
         }
 
         static public bool DetectIfNextFieldFlag(string codeLine)
@@ -21,6 +21,12 @@ namespace NAV_Comment_tool.ChangeDetection
         {
             Match match = rgxField.Match(codeLine);
             return match.Groups["FieldName"].Value.Trim(' ');
+        }
+
+        static public string GetNextFieldNumber(string codeLine)
+        {
+            Match match = rgxField.Match(codeLine);
+            return match.Groups["FieldNumber"].Value.Trim(' ');
         }
 
         static public bool DetectIfFieldsStartFlag(string codeLine)

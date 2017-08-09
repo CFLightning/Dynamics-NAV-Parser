@@ -36,7 +36,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                     int nesting = 0;
                     string trigger = "";
                     bool fieldFlag = false, actionFlag = false, controlFlag = false, openControlFlag = false;
-                    string fieldName = "", sourceExpr = "", description = "";
+                    string fieldName = "", sourceExpr = "", description = "", fieldContent = "";
 
                     while (null != (line = reader.ReadLine()))
                     {
@@ -51,7 +51,11 @@ namespace NAV_Comment_tool.modificationSearchTool
                             else if (fieldFlag == true && ChangeDetection.FlagDetection.DetectIfFieldsEndFlag(line))
                                 fieldFlag = false;
                             else if (fieldFlag == true && ChangeDetection.FlagDetection.DetectIfNextFieldFlag(line))
+                            {
                                 fieldName = ChangeDetection.FlagDetection.GetNextFieldName(line);
+                                fieldContent = ChangeDetection.FlagDetection.GetNextFieldNumber(line);
+                            }
+                                
 
                         }
                         else if (obj.Type == "Page")
@@ -119,7 +123,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                             {
                                 if (line.Contains(modtag) && line.Contains("Description=") && !(line.Contains("Version List=")))
                                 {
-                                    string fieldContent = ChangeDetection.FlagDetection.GetDescription(line);
+                                    //string fieldContent = ChangeDetection.FlagDetection.GetDescription(line);
                                     change = new ChangeClass(modtag, fieldContent, "Field", fieldName, obj.Type + " " + obj.Number + " " + obj.Name);
                                     ChangeClassRepository.AppendChange(change);
                                     obj.Changelog.Add(change);
