@@ -27,7 +27,7 @@ namespace NAV_Comment_tool.saveTool
                 StringBuilder builder = new StringBuilder();
                 StringWriter writer = new StringWriter(builder);
                 string line;
-                bool bracketFlag = false, beginFlag = false, writing = false, documentationPrompt = false, deleteFlag = false;
+                bool bracketFlag = false, beginFlag = false, writing = false, documentationPrompt = false, deleteFlag = false, addBrackets = false, bracketsExist = false;
 
                 while (null != (line = reader.ReadLine()))
                 {
@@ -36,15 +36,10 @@ namespace NAV_Comment_tool.saveTool
                         beginFlag = true;
                     }
 
-                    //if (line.StartsWith("    END.") && bracketFlag == false && beginFlag)
-                    //{
-                    //    writing = true;
-                    //    continue;
-                    //}
-
                     if (line.StartsWith("    {") && beginFlag)
                     {
                         bracketFlag = true;
+                        bracketsExist = true;
                     }
 
                     if(line.StartsWith("      Automated Documentation"))
@@ -55,15 +50,29 @@ namespace NAV_Comment_tool.saveTool
                     if (line.StartsWith("    }") && bracketFlag)
                     {
                         bracketFlag = false;
+                        deleteFlag = false;
                         writing = true;
+                        bracketsExist = true;
                     }
 
-                    if (line.StartsWith("    END") && beginFlag)
+                    if (line.StartsWith("    END") && beginFlag && bracketsExist)
                     {
                         beginFlag = false;
+                        //deleteFlag = false;
                     }
 
-                    if(line.StartsWith("      #") && documentationPrompt)
+                    if (line.StartsWith("    END.") && beginFlag && !bracketsExist)
+                    {
+                        //Console.WriteLine("HELLO");
+                        writing = true;
+                        addBrackets = true;
+                        deleteFlag = false;
+                        //bracketsExist = true;
+                        beginFlag = false;
+                        //continue;
+                    }
+
+                    if (line.StartsWith("      #") && documentationPrompt)
                     {
                         deleteFlag = false;
                         foreach (string item in TagDetection.GetModyficationList(obj.Contents))
@@ -74,7 +83,18 @@ namespace NAV_Comment_tool.saveTool
 
                     if (writing)
                     {
-                        if(!(documentationPrompt) && obj.Changelog.Count > 0) writer.WriteLine(Environment.NewLine + "      Automated Documentation");
+                        if (addBrackets)
+                        {
+                            writer.WriteLine("    {");
+                        }
+                        if (!(documentationPrompt) && obj.Changelog.Count > 0 && !addBrackets)
+                        {
+                            writer.WriteLine(Environment.NewLine + "      Automated Documentation");
+                        }
+                        else if (!(documentationPrompt) && obj.Changelog.Count > 0 && addBrackets)
+                        {
+                            writer.WriteLine("      Automated Documentation");
+                        }
                         foreach (string item in TagDetection.GetModyficationList(obj.Contents))
                         {
                             int actionCounter = 0;
@@ -98,9 +118,11 @@ namespace NAV_Comment_tool.saveTool
                                 writer.WriteLine("      - New Actions");
                             }
                         }
+                        if (addBrackets) writer.WriteLine("    }");
+                        addBrackets = false;
                         writing = false;
                     }
-                    if(!(deleteFlag)) writer.WriteLine(line);
+                    if (!(deleteFlag)) writer.WriteLine(line);
                 }
 
                 obj.Contents = builder.ToString();

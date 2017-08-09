@@ -78,7 +78,7 @@ namespace NAV_Comment_tool.saveTool
                                     isOneLine = true;
                                 }
                                 writer.WriteLine("{0}<next>{1}<next>{2}<next>{3}<next>{4}", lineAmount, (int)result, obj.Name, tagLine, line);
-                                Console.WriteLine("{0}<next>{1}<next>{2}<next>{3}<next>{4}", lineAmount, (int)result, obj.Name, tagLine, line);
+                                //Console.WriteLine("{0}<next>{1}<next>{2}<next>{3}<next>{4}", lineAmount, (int)result, obj.Name, tagLine, line);
                                 lineAmount++;
                                 if (isOneLine)
                                 {
