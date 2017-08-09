@@ -37,6 +37,7 @@ namespace NAV_Comment_tool.saveTool
 
         public static bool UpdateDocumentationTrigger()
         {
+            List<string> locationList = new List<string>();
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 StringReader reader = new StringReader(obj.Contents);
@@ -122,10 +123,12 @@ namespace NAV_Comment_tool.saveTool
                         {
                             int actionCounter = 0;
                             writer.WriteLine("      #" + item + "#");
+                            locationList = new List<string>();
                             foreach (ChangeClass change in obj.Changelog)
                             {
-                                if (change.ChangelogCode == item && change.ChangeType != "Action")
+                                if (change.ChangelogCode == item && change.ChangeType != "Action" && !(locationList.Exists(loc => loc == change.Location)))
                                 {
+                                    locationList.Add(change.Location);
                                     writer.WriteLine("      - New " + change.ChangeType + ": " + change.Location);
                                 }
 
