@@ -15,9 +15,6 @@ namespace NAV_Comment_tool.fileSplitter
 
         static TagDetection()
         {
-            modNo = @"(?<mod>[A-Z0-9\._-]+)";
-            prefix = @"(IT/)?";
-            endSymbol = @"($| )";
             tagPatterns = new Regex[3];
             tagPairPattern = new List<Regex[]>();
             DefinePatternsNEW();
@@ -27,20 +24,24 @@ namespace NAV_Comment_tool.fileSplitter
 
         static private Regex[] DefinePatternsNEW()
         {
-            string lineFrontComment = @" *// *";        // BEGIN,AND // brak  koment//// .*(\S^(//))
-            string lineBackComment = @" *[^\s/{2}]+.*// *";    // OTHER .*\S+.\
+            string lineFrontComment = @" *// *";                        // BEGIN,AND
+            string lineBackComment = @" *[^\s/{2}]+.*// *";             // OTHER
+
+            modNo = @"(?<mod>([A-Z0-9\._-]+)|(\d{2,4}.\d{2}.\d{2,4}))"; //  literal or date tag
+            prefix = @"(IT/)?";                                         //  ignore "IT/"
+            endSymbol = @".?($| )";
 
             List<Regex[]> PatternList = new List<Regex[]>();
 
             List<string> beginPatternParts = new List<string>();
             beginPatternParts.Add(@"<-+ *" + prefix + modNo + endSymbol);
-            beginPatternParts.Add(prefix + modNo + @" *begin." + endSymbol);
-            beginPatternParts.Add(prefix + modNo + @" */S." + endSymbol);
+            beginPatternParts.Add(prefix + modNo + @" *begin" + endSymbol);
+            beginPatternParts.Add(prefix + modNo + @" */S" + endSymbol);
 
             List<string> endPatternParts = new List<string>();
             endPatternParts.Add(@"-+> *" + prefix + modNo + endSymbol);
-            endPatternParts.Add(prefix + modNo + @" * end." + endSymbol);
-            endPatternParts.Add(prefix + modNo + @" */E." + endSymbol);
+            endPatternParts.Add(prefix + modNo + @" * end" + endSymbol);
+            endPatternParts.Add(prefix + modNo + @" */E" + endSymbol);
 
             List<string> otherPatternParts = new List<string>();
             otherPatternParts.Add(prefix + modNo + @" *$");
@@ -123,7 +124,7 @@ namespace NAV_Comment_tool.fileSplitter
             List<string> tagList = new List<string>();
             foreach (var line in codeLines)
             {
-                if (line.Contains("//"))
+                if (line.Contains(@"//"))
                 {
                     if (CheckIfTagInLine(line))
                     {
