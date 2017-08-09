@@ -102,7 +102,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                             {
                                 if (TagDetection.CheckIfTagsIsAlone(line))
                                 {
-                                    change = new ChangeClass(modtag, line, "Code", trigger, obj.Type + " " + obj.Number + " " + obj.Name);
+                                    change = new ChangeClass(modtag, line, "Code", (fieldFlag ? (fieldName + " - ") : "") + trigger, obj.Type + " " + obj.Number + " " + obj.Name);
                                     ChangeClassRepository.AppendChange(change);
                                     obj.Changelog.Add(change);
                                 }
