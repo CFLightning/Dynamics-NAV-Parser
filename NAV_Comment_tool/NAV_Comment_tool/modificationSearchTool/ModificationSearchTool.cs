@@ -111,7 +111,7 @@ namespace NAV_Comment_tool.modificationSearchTool
                                     ChangeClassRepository.AppendChange(change);
                                     obj.Changelog.Add(change);
                                 }
-                                else if(TagDetection.GetTagedModyfication(line) == modtag)
+                                else if(TagDetection.GetTagedModyfication(line) == modtag && TagDetection.CheckIfBeginTagInLine(line))
                                 {
                                     currentFlag = modtag;
                                     startFlag = true;
