@@ -44,13 +44,20 @@ namespace NAV_Comment_tool.saveTool
 
         private static string CleanFileName(string fileName)
         {
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
+            string filepath = string.Join("_", fileName.Split(Path.GetInvalidFileNameChars()));
+            return filepath;
         }
 
         public static bool SaveObjectModificationFiles(string path)
         {
             string objModPath = path + "Modification Objects";
             DirectoryInfo directory = Directory.CreateDirectory(objModPath);
+
+            foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
+            {
+                if (File.Exists(objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt"))File.Delete(objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt");
+            }
+
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 List < string > changeList = new List<string>();
@@ -58,8 +65,7 @@ namespace NAV_Comment_tool.saveTool
 
                 foreach(string change in changeList)
                 {
-                    File.AppendAllText(CleanFileName(objModPath + @"\Objects modificated in " + change + " .txt"), obj.Contents);
-                    File.AppendAllText(CleanFileName(objModPath + @"\Objects modificated in " + change + " .txt"), Environment.NewLine + "----------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    File.AppendAllText(objModPath + @"\Objects modificated in " + CleanFileName(change) + " .txt", obj.Contents);
                 }
             }
             return true;
