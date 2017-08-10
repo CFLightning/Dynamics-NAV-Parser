@@ -40,6 +40,12 @@ namespace NAV_Comment_tool.saveTool
             return true;
         }
 
+        public static bool SaveObjectModificationFiles(string path)
+        {
+
+            return true;
+        }
+
         public static bool SaveDocumentationToFile(string path, string documentation)
         {
             File.WriteAllText(path + @"Documentation .txt", documentation);

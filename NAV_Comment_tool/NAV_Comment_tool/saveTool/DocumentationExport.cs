@@ -11,22 +11,21 @@ namespace NAV_Comment_tool.saveTool
 {
     class DocumentationExport
     {
-        enum Types { TableData, Table, Form, Report, Dataport, Codeunit, XMLport, MenuSuite, Page }; // Add actual numbers for each of the parameters
-
+        enum Types { TableData, Table, Form, Report, Dataport, Codeunit, XMLport, MenuSuite, Page }; 
         private static Dictionary<string, string> mappingDictionary = new Dictionary<string, string>();
 
-        private static void InitDictionary()
+        private static void InitDictionary(string path)
         {
-            var dictionaryLines = File.ReadLines(@"C:\Users\Administrator\Documents\Exported example objects\mapping.csv");
+            var dictionaryLines = File.ReadLines(path + "mapping.csv");
             mappingDictionary = dictionaryLines.Select(line => line.Split(';')).ToDictionary(data => data[0], data => data[1]);
             //Console.WriteLine(mappingDictionary["FX01"]);
         }
 
-        public static string GenerateDocumentationFile()
+        public static string GenerateDocumentationFile(string path)
         {
             Types result;
             int lineAmount = 1;
-            InitDictionary();
+            InitDictionary(path);
 
             Regex lineChecker = new Regex(".*#.*#.*");
             Regex blockChecker = new Regex(".*#.*#$");
