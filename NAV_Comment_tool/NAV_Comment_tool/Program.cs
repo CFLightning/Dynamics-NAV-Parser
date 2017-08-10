@@ -32,6 +32,8 @@ namespace NAV_Comment_tool
             SaveTool.SaveChangesToFiles(path);
             Console.WriteLine("Generating <next> documentation file");
             SaveTool.SaveDocumentationToFile(path, DocumentationExport.GenerateDocumentationFile(path));
+            Console.WriteLine("Saving objects grouped");
+            SaveTool.SaveObjectModificationFiles(path);
             Console.WriteLine("Success");
         }
     }

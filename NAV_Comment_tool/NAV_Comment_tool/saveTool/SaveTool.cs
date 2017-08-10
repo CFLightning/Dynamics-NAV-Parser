@@ -1,7 +1,9 @@
 ﻿using NAV_Comment_tool.parserClass;
 using NAV_Comment_tool.repositories;
 using System;
+using System.Linq;
 using System.IO;
+using System.Collections.Generic;
 
 namespace NAV_Comment_tool.saveTool
 {
@@ -40,9 +42,26 @@ namespace NAV_Comment_tool.saveTool
             return true;
         }
 
+        private static string CleanFileName(string fileName)
+        {
+            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
+        }
+
         public static bool SaveObjectModificationFiles(string path)
         {
+            string objModPath = path + "Modification Objects";
+            DirectoryInfo directory = Directory.CreateDirectory(objModPath);
+            foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
+            {
+                List < string > changeList = new List<string>();
+                changeList = obj.Changelog.Select(o => o.ChangelogCode).Distinct().ToList();
 
+                foreach(string change in changeList)
+                {
+                    File.AppendAllText(CleanFileName(objModPath + @"\Objects modificated in " + change + " .txt"), obj.Contents);
+                    File.AppendAllText(CleanFileName(objModPath + @"\Objects modificated in " + change + " .txt"), Environment.NewLine + "----------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                }
+            }
             return true;
         }
 
