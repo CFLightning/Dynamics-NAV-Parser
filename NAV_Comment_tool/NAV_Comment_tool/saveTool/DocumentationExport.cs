@@ -1,7 +1,9 @@
 ﻿using NAV_Comment_tool.parserClass;
 using NAV_Comment_tool.repositories;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -11,11 +13,21 @@ namespace NAV_Comment_tool.saveTool
     {
         enum Types { TableData, Table, Form, Report, Dataport, Codeunit, XMLport, MenuSuite, Page }; // Add actual numbers for each of the parameters
 
+        private static Dictionary<string, string> mappingDictionary = new Dictionary<string, string>();
+
+        private static void InitDictionary()
+        {
+            var dictionaryLines = File.ReadLines(@"C:\Users\Administrator\Documents\Exported example objects\mapping.csv");
+            mappingDictionary = dictionaryLines.Select(line => line.Split(';')).ToDictionary(data => data[0], data => data[1]);
+            //Console.WriteLine(mappingDictionary["FX01"]);
+        }
+
         public static string GenerateDocumentationFile()
         {
             Types result;
             int lineAmount = 1;
-            
+            InitDictionary();
+
             Regex lineChecker = new Regex(".*#.*#.*");
             Regex blockChecker = new Regex(".*#.*#$");
             string documentation = "";
@@ -69,6 +81,12 @@ namespace NAV_Comment_tool.saveTool
                                 trimmer = line.TrimStart(' ');
                                 trimmer = trimmer.TrimEnd(' ');
                                 if(blockChecker.IsMatch(trimmer)) {
+                                    trimmer = trimmer.Trim('#');
+                                    if (mappingDictionary.ContainsKey(trimmer))
+                                    {
+                                        trimmer = mappingDictionary[trimmer];
+                                    }
+                                    trimmer = "#" + trimmer + "#";
                                     tagLine = trimmer;
                                 }
                                 else if (lineChecker.IsMatch(trimmer))
@@ -91,6 +109,7 @@ namespace NAV_Comment_tool.saveTool
                 }
             }
             documentation = builder.ToString();
+
             return documentation;
         }
     }

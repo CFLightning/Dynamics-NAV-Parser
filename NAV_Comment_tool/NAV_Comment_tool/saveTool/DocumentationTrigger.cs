@@ -21,7 +21,6 @@ namespace NAV_Comment_tool.saveTool
          *      itd....
          */
 
-
         private static string UpdateVersionList(string codeLine, ObjectClass obj)
         {
             List<string> versionList = new List<string>();
@@ -41,6 +40,7 @@ namespace NAV_Comment_tool.saveTool
 
         public static bool UpdateDocumentationTrigger()
         {
+            
             List<string> locationList = new List<string>();
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
