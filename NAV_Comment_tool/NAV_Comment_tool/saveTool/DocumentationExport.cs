@@ -84,10 +84,12 @@ namespace NAV_Comment_tool.saveTool
                                     trimmer = trimmer.Trim('#');
                                     if (mappingDictionary.ContainsKey(trimmer))
                                     {
+                                        line = line.Replace(trimmer, mappingDictionary[trimmer]);
                                         trimmer = mappingDictionary[trimmer];
                                     }
                                     trimmer = "#" + trimmer + "#";
                                     tagLine = trimmer;
+                                    
                                 }
                                 else if (lineChecker.IsMatch(trimmer))
                                 {
