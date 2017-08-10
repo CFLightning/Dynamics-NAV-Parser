@@ -228,9 +228,10 @@ namespace NAV_Comment_tool.fileSplitter
                     {
                         if (codeLines[i].Contains("Description="))
                         {
-                            string fieldDescription = ChangeDetection.FlagDetection.GetDescription(codeLines[i]);
-                            fieldDescription = fieldDescription.Replace("IT/", "");
-                            tagList.AddRange(fieldDescription.Split(',').ToList());
+                        //string fieldDescription = ChangeDetection.FlagDetection.GetDescription(codeLines[i]);
+                        //fieldDescription = fieldDescription.Replace("IT/", "");
+                        //tagList.AddRange(fieldDescription.Split(',').ToList());
+                        tagList.AddRange(GetDescriptionTagList(codeLines[i]));
                         }
                     }
                 i++;
@@ -245,6 +246,13 @@ namespace NAV_Comment_tool.fileSplitter
                 }
             }
             return tagList;
+        }
+
+        static public List<string> GetDescriptionTagList(string codeLine)
+        {
+            string fieldDescription = ChangeDetection.FlagDetection.GetDescription(codeLine);
+            fieldDescription = fieldDescription.Replace("IT/", "");
+            return fieldDescription.Split(',').ToList();
         }
     }
 }
