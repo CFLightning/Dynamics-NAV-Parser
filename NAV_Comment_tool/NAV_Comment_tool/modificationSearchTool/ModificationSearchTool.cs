@@ -56,8 +56,6 @@ namespace NAV_Comment_tool.modificationSearchTool
                                 fieldName = ChangeDetection.FlagDetection.GetNextFieldName(line);
                                 fieldContent = ChangeDetection.FlagDetection.GetNextFieldNumber(line);
                             }
-                                
-
                         }
                         else if (obj.Type == "Page")
                         {

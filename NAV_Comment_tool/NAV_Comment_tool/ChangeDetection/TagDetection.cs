@@ -29,8 +29,8 @@ namespace NAV_Comment_tool.fileSplitter
             string lineBackComment = @" *[^\s/{2}]+.*// *";             // OTHER
 
             date = @"(\d{2,4}.\d{2}.\d{2,4})";
-            modNo = @"(?<mod>([A-Z0-9\._-]+)|" + date + ")"; //  literal or date tag
-            prefix = @"(IT/)?";                                         //  ignore "IT/"
+            modNo = @"(?<mod>([A-Z0-9\._-]+)|" + date + ")";
+            prefix = @"(IT/)?";
             endSymbol = @".?" + date + @"?" + "($| )";
 
             List<Regex[]> PatternList = new List<Regex[]>();

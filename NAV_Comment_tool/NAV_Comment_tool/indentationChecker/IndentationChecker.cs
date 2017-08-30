@@ -15,7 +15,7 @@ namespace NAV_Comment_tool.indentationChecker
         {
             triggers = new List<string>
             {
-                  "OnInit",
+                "OnInit",
                 "OnRun",
                 "OnOpenPage",
                 "OnClosePage",

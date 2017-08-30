@@ -8,27 +8,14 @@ namespace NAV_Comment_tool
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("Checking path, splitting files");
+
             //string path = @"C:\Users\Administrator\Documents\Exported example objects\";
             //FileSplitter.SplitFile(path + "ExportedObjectsNAV.txt"); // TODO: Change hardcoded path to dynamically chosen one
-            //string path = @"C:\Users\Administrator\Documents\GIt\NAV_Comment_tool\NAV_Comment_tool\TEMP\";
-            //FileSplitter.SplitFile(path + "ExportedObjectsNAV.txt");
-
-            Console.WriteLine("Parameters: " + args.Length);
-            for (int i = 0; i < args.Length; i++)
-                Console.WriteLine(i + "\t" + args[i]);
-
-            if (args.Length != 2)
-            {
-                Console.WriteLine("You should pass 2 parameters: folder path and file name");
-                Console.ReadLine();
-                return;
-            }
-
-            string path = args[0];
-            FileSplitter.SplitFile(args[0] + args[1]);
+            string path = @"C:\Users\Administrator\Documents\GIt\NAV_Comment_tool\NAV_Comment_tool\TEMP\";
+            FileSplitter.SplitFile(path + @"ITWS_Test_01.08.2017.txt");
 
             Console.WriteLine("Fixing indentations");
             IndentationChecker.CheckIndentations();
@@ -48,8 +35,6 @@ namespace NAV_Comment_tool
             Console.WriteLine("Saving objects grouped");
             SaveTool.SaveObjectModificationFiles(path);
             Console.WriteLine("Success");
-
-            Console.ReadLine();
         }
     }
 }
