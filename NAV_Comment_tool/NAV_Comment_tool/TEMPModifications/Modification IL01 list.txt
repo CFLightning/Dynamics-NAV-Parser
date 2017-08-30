@@ -1,9 +1,0 @@
-Source object: Table 18 Customer
-Change location: Phone No. - OnValidate
-
-IF "Phone No." <> '' THEN BEGIN
-  IF STRLEN("Phone No.") < 9 THEN
-    ERROR(Text099);
-END;
-
-----------------------------------------------------------------------------------------------------

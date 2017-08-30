@@ -1,6 +1,0 @@
-Source object: Table 18 Customer
-Change location: Don't use Item Unit Price - OnValidate
-
-TESTFIELD("Customer Price Group");
-
-----------------------------------------------------------------------------------------------------

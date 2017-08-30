@@ -1,6 +1,0 @@
-Source object: Table 18 Customer
-Change location: PROCEDURE MFSetEditable
-
-EXIT(FieldPermissionManagement.MFSetVisibility(TableID, FieldID));
-
-----------------------------------------------------------------------------------------------------
