@@ -1,0 +1,25 @@
+Source object: Table 18 Customer
+Change location: Salesperson Code - OnValidate
+
+IF GUIALLOWED THEN //305
+
+----------------------------------------------------------------------------------------------------
+Source object: Table 18 Customer
+Change location: Salesperson Code - OnValidate
+
+ELSE
+  EXIT;
+
+----------------------------------------------------------------------------------------------------
+Source object: Table 18 Customer
+Change location: Salesperson Code - OnValidate
+
+IF GUIALLOWED THEN //305
+
+----------------------------------------------------------------------------------------------------
+Source object: Table 18 Customer
+Change location: Salesperson Code - OnValidate
+
+IF GUIALLOWED THEN //305
+
+----------------------------------------------------------------------------------------------------

@@ -1,0 +1,42 @@
+Source object: Table 18 Customer
+Change location: Salesperson Code - OnValidate
+
+PHCode := 'KOD SPR';
+                                                                
+IF NOT DimensionValue.GET(PHCode,"Salesperson Code") THEN BEGIN
+  IF GUIALLOWED THEN //305
+    ERROR(FXText013,PHCode,"Salesperson Code")//;
+  //305/S
+  ELSE
+    EXIT;
+  //305/E
+END ELSE BEGIN
+  DimensionValue.TESTFIELD(Blocked,FALSE);
+END;
+
+GLSetup.GET;
+IF GLSetup."Global Dimension 1 Code" = PHCode THEN BEGIN
+  VALIDATE("Global Dimension 1 Code","Salesperson Code");
+END ELSE BEGIN
+  IF GLSetup."Global Dimension 2 Code" = PHCode THEN BEGIN
+    VALIDATE("Global Dimension 2 Code","Salesperson Code");
+  END;
+END;
+
+IF DefaultDimension.GET(18,"No.",PHCode) THEN BEGIN
+  DefaultDimension.VALIDATE("Dimension Value Code","Salesperson Code");
+  DefaultDimension.MODIFY(FALSE);
+  IF GUIALLOWED THEN //305
+  ;//MESSAGE(FXText014,PHCode,"Salesperson Code","No.");
+END ELSE BEGIN
+  DefaultDimension.INIT;
+  DefaultDimension."Table ID" := 18;
+  DefaultDimension."No." := "No.";
+  DefaultDimension."Dimension Code" := PHCode;
+  DefaultDimension."Dimension Value Code" := "Salesperson Code";
+  DefaultDimension.INSERT(FALSE);
+  IF GUIALLOWED THEN //305
+  ;//MESSAGE(FXText014,PHCode,"Salesperson Code","No.");
+END;
+
+----------------------------------------------------------------------------------------------------

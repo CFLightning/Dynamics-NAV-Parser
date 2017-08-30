@@ -11,25 +11,29 @@ namespace NAV_Comment_tool
         static void Main(string[] args)
         {
             Console.WriteLine("Checking path, splitting files");
-            //string path = @"C:\Users\Administrator\Documents\Exported example objects\";
-            //FileSplitter.SplitFile(path + "ExportedObjectsNAV.txt"); // TODO: Change hardcoded path to dynamically chosen one
-            //string path = @"C:\Users\Administrator\Documents\GIt\NAV_Comment_tool\NAV_Comment_tool\TEMP\";
-            //FileSplitter.SplitFile(path + "ExportedObjectsNAV.txt");
-
+            
             Console.WriteLine("Parameters: " + args.Length);
             for (int i = 0; i < args.Length; i++)
                 Console.WriteLine(i + "\t" + args[i]);
 
-            if (args.Length != 2)
+            if (args.Length != 4)
             {
-                Console.WriteLine("You should pass 2 parameters: folder path and file name");
+                Console.WriteLine("\nParameters error! You should pass 3 values!\n");
                 Console.ReadLine();
                 return;
             }
 
-            string path = args[0];
-            FileSplitter.SplitFile(args[0] + args[1]);
+            Console.WriteLine("\nModification name:\t" + args[0]);
+            Console.WriteLine("Path to input file:\t" + args[1]);
+            Console.WriteLine("Path to mapping file:\t" + args[2]);
+            Console.WriteLine("Path to output folder:\t" + args[3] + Environment.NewLine);
 
+            string expectedModification = args[0];
+            string inputFilePath = args[1];
+            string mappingFilePath = args[2];
+            string outputPath = args[3] + "\\";
+
+            FileSplitter.SplitFile(inputFilePath);
             Console.WriteLine("Fixing indentations");
             IndentationChecker.CheckIndentations();
             Console.WriteLine("Looking for modifications");
@@ -40,13 +44,13 @@ namespace NAV_Comment_tool
             DocumentationTrigger.UpdateDocumentationTrigger();
 
             Console.WriteLine("Saving objects");
-            SaveTool.SaveObjectsToFiles(path);
+            SaveTool.SaveObjectsToFiles(outputPath);
             Console.WriteLine("Saving changelogs");
-            SaveTool.SaveChangesToFiles(path);
+            SaveTool.SaveChangesToFiles(outputPath);
             Console.WriteLine("Generating <next> documentation file");
-            SaveTool.SaveDocumentationToFile(path, DocumentationExport.GenerateDocumentationFile(path));
+            SaveTool.SaveDocumentationToFile(outputPath, DocumentationExport.GenerateDocumentationFile(outputPath,mappingFilePath));
             Console.WriteLine("Saving objects grouped");
-            SaveTool.SaveObjectModificationFiles(path);
+            SaveTool.SaveObjectModificationFiles(outputPath);
             Console.WriteLine("Success");
 
             Console.ReadLine();

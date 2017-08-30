@@ -1,0 +1,15 @@
+Source object: Table 18 Customer
+Change location: Chain Customer - OnValidate
+
+IF "Chain Customer" THEN BEGIN
+  //IF "Chain Customer No." = '' THEN
+    IF "No." = "Bill-to Customer No." THEN
+      "Chain Customer No." := "Bill-to Customer No."
+    ELSE BEGIN
+      IF CustomerLoc.GET("Bill-to Customer No.") AND (CustomerLoc."Chain Customer") THEN
+        "Chain Customer No." := CustomerLoc."Chain Customer No.";
+    END;
+END ELSE
+  "Chain Customer No." := ''
+
+----------------------------------------------------------------------------------------------------

@@ -1,0 +1,6 @@
+Source object: Table 18 Customer
+Change location: OnInsert
+
+"Created by" := USERID;
+
+----------------------------------------------------------------------------------------------------

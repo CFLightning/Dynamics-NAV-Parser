@@ -16,16 +16,16 @@ namespace NAV_Comment_tool.saveTool
 
         private static void InitDictionary(string path)
         {
-            var dictionaryLines = File.ReadLines(path + "mapping.csv");
+            var dictionaryLines = File.ReadLines(path);
             mappingDictionary = dictionaryLines.Select(line => line.Split(';')).ToDictionary(data => data[0], data => data[1]);
             //Console.WriteLine(mappingDictionary["FX01"]);
         }
 
-        public static string GenerateDocumentationFile(string path)
+        public static string GenerateDocumentationFile(string path, string mappingPath)
         {
             Types result;
             int lineAmount = 1;
-            InitDictionary(path);
+            InitDictionary(mappingPath);
 
             Regex lineChecker = new Regex(".*#.*#.*");
             Regex blockChecker = new Regex(".*#.*#$");

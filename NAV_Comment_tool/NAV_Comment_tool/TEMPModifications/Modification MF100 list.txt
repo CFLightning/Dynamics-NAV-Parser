@@ -1,0 +1,62 @@
+Source object: Table 18 Customer
+Change location: OnInsert
+
+Blocked := Blocked::All;
+
+----------------------------------------------------------------------------------------------------
+Source object: Table 18 Customer
+Change location: OnModify
+
+//MODIFY;
+//CLEAR(MandatoryFieldManagement);
+//MFRecordref.GETTABLE(Rec);
+//MandatoryFieldManagement.SetShowInfo(TRUE);
+//IF MandatoryFieldManagement.CheckMandatoryFields(MFRecordref.RECORDID) THEN
+//  Blocked := Blocked::All;
+
+----------------------------------------------------------------------------------------------------
+Source object: Table 18 Customer
+Change location: Blocked - OnValidate
+
+{
+// MF100 begin
+//IF (NOT Rec.Blocked) AND xRec.Blocked THEN BEGIN
+IF (Blocked = 0) AND (xRec.Blocked > 0) THEN BEGIN
+  CLEAR(MandatoryFieldManagement);
+  MODIFY;
+  MFRecordref.GETTABLE(Rec);
+  IF MandatoryFieldManagement.CheckMandatoryFields(MFRecordref.RECORDID) THEN
+    ERROR('');
+END;
+// MF100 end;
+}
+IF (xRec.Blocked <> Blocked::" ") AND (xRec.Blocked <> Rec.Blocked) THEN BEGIN
+  IF (Rec."Shipment Address Mandatory") AND GUIALLOWED THEN BEGIN
+    ShiptoAddressL.SETRANGE("Customer No.", "No.");
+    ShiptoAddressL.FINDSET(FALSE, FALSE);
+    //IF ShiptoAddressL.FINDSET(FALSE, FALSE) THEN BEGIN
+    REPEAT
+      CLEAR(MandatoryFieldManagement);
+      MFRecordRef.GETTABLE(ShiptoAddressL);
+      IF MandatoryFieldManagement.CheckMandatoryFields(MFRecordRef.RECORDID) THEN
+        ERROR('');
+    UNTIL ShiptoAddressL.NEXT = 0;
+    //END;
+  END;
+END;
+
+IF (xRec.Blocked <> Blocked::" ") AND (xRec.Blocked <> Rec.Blocked) THEN BEGIN
+  CLEAR(MandatoryFieldManagement);
+  MODIFY;
+  MFRecordRef.GETTABLE(Rec);
+  IF MandatoryFieldManagement.CheckMandatoryFields(MFRecordRef.RECORDID) THEN
+    ERROR('');
+END;
+
+----------------------------------------------------------------------------------------------------
+Source object: Table 18 Customer
+Change location: PROCEDURE UpdateCustFromTemplate
+
+Cust."Shipment Address Mandatory" := CustTemplate."Shipment Address Mandatory";
+
+----------------------------------------------------------------------------------------------------
