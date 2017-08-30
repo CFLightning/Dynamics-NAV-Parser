@@ -15,8 +15,8 @@ namespace NAV_Comment_tool.saveTool
             DirectoryInfo directory = Directory.CreateDirectory(objPath);
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
-                File.WriteAllText(path + @"\Objects\" + obj.Type + " " + obj.Number + " " + obj.Name + " .txt", obj.Contents);
-                Console.WriteLine("- Created file " + path + @"\Objects\" + obj.Type + " " + obj.Number + " " + obj.Name + " .txt");
+                File.WriteAllText(path + @"\Objects\" + obj.Type + " " + obj.Number + " " + obj.Name + ".txt", obj.Contents);
+                Console.WriteLine("- Created file " + path + @"\Objects\" + obj.Type + " " + obj.Number + " " + obj.Name + ".txt");
             }
             return true;
         }
@@ -57,8 +57,8 @@ namespace NAV_Comment_tool.saveTool
 
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {
-                if (File.Exists(objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt"))File.Delete(objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt");
-                Console.WriteLine("- Created file " + objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt");
+                if (File.Exists(objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt"))File.Delete(objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + ".txt");
+                Console.WriteLine("- Created file " + objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + ".txt");
             }
 
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
@@ -68,7 +68,7 @@ namespace NAV_Comment_tool.saveTool
 
                 foreach(string change in changeList)
                 {
-                    File.AppendAllText(objModPath + @"\Objects modificated in " + CleanFileName(change) + " .txt", obj.Contents);
+                    File.AppendAllText(objModPath + @"\Objects modificated in " + CleanFileName(change) + ".txt", obj.Contents);
                 }
             }
             return true;
@@ -77,7 +77,7 @@ namespace NAV_Comment_tool.saveTool
         public static bool SaveDocumentationToFile(string path, string documentation)
         {
             File.WriteAllText(path + @"Documentation .txt", documentation);
-            Console.WriteLine("- Created file " + path + @"Documentation .txt");
+            Console.WriteLine("- Created file " + path + @"Documentation.txt");
             return true;
         }
     }
