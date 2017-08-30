@@ -11,7 +11,7 @@ namespace NAV_Comment_tool
         static void Main(string[] args)
         {
             Console.WriteLine("Checking path, splitting files");
-            
+            Console.WriteLine(Environment.NewLine + "----------------------------------------------------------------");
             Console.WriteLine("Parameters: " + args.Length);
             for (int i = 0; i < args.Length; i++)
                 Console.WriteLine(i + "\t" + args[i]);
@@ -23,21 +23,29 @@ namespace NAV_Comment_tool
                 return;
             }
 
-            Console.WriteLine("\nModification name:\t" + args[0]);
-            Console.WriteLine("Path to input file:\t" + args[1]);
-            Console.WriteLine("Path to mapping file:\t" + args[2]);
-            Console.WriteLine("Path to output folder:\t" + args[3] + Environment.NewLine);
-
             string expectedModification = args[0];
             string inputFilePath = args[1];
             string mappingFilePath = args[2];
             string outputPath = args[3] + "\\";
 
+            Console.WriteLine();
+            Console.WriteLine("Modification name:\t" + expectedModification);
+            Console.WriteLine("Path to input file:\t" + inputFilePath);
+            Console.WriteLine("Path to mapping file:\t" + mappingFilePath);
+            Console.WriteLine("Path to output folder:\t" + outputPath);
+            Console.WriteLine("----------------------------------------------------------------" + Environment.NewLine);
+
+
             FileSplitter.SplitFile(inputFilePath);
             Console.WriteLine("Fixing indentations");
             IndentationChecker.CheckIndentations();
             Console.WriteLine("Looking for modifications");
-            ModificationSearchTool.FindAndSaveChanges();
+            if (!ModificationSearchTool.FindAndSaveChanges(expectedModification))
+            {
+                Console.WriteLine("ERROR: Modofication {0} not found", expectedModification);
+                Console.ReadLine();
+                return;
+            }
             Console.WriteLine("Preparing the modifications for saving");
             ModificationCleanerTool.CleanChangeCode();
             Console.WriteLine("Generating Documentation() trigger");

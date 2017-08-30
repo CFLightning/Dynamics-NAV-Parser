@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
 
+
 namespace NAV_Comment_tool.modificationSearchTool
 {
     class ModificationSearchTool
@@ -18,11 +19,15 @@ namespace NAV_Comment_tool.modificationSearchTool
             tags = TagDetection.GetModyficationList(obj.Contents);
         }
 
-        public static bool FindAndSaveChanges()
+        public static bool FindAndSaveChanges(string expectedModification)
         {
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 InitTags(obj);
+                if (expectedModification != "" && !tags.Contains(expectedModification))
+                    return false;
+                if (expectedModification != "")
+                    tags = new List<string>() { expectedModification };
                 foreach (string modtag in tags) 
                 {
                     StringReader reader = new StringReader(obj.Contents);
@@ -31,7 +36,6 @@ namespace NAV_Comment_tool.modificationSearchTool
                     string line, currentFlag = null; //MAYBE SUBJECT TO CHANGES
                     Regex endFlag = new Regex("");
                     string nestedFlag = "";
-                    //Regex[] endFlags = new Regex[3];
                     ChangeClass change = new ChangeClass();
                     bool startFlag = false;
                     int nesting = 0;

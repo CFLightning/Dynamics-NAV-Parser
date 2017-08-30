@@ -16,6 +16,7 @@ namespace NAV_Comment_tool.saveTool
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
             {
                 File.WriteAllText(path + @"\Objects\" + obj.Type + " " + obj.Number + " " + obj.Name + " .txt", obj.Contents);
+                Console.WriteLine("- Created file " + path + @"\Objects\" + obj.Type + " " + obj.Number + " " + obj.Name + " .txt");
             }
             return true;
         }
@@ -27,6 +28,7 @@ namespace NAV_Comment_tool.saveTool
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {
                 if (File.Exists(modPath + @"\Modification " + chg.ChangelogCode + " list.txt")) File.Delete(modPath + @"\Modification " + chg.ChangelogCode + " list.txt");
+                Console.WriteLine("- Created file " + modPath + @"\Modification " + chg.ChangelogCode + " list.txt");
             }
 
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
@@ -56,6 +58,7 @@ namespace NAV_Comment_tool.saveTool
             foreach (ChangeClass chg in ChangeClassRepository.changeRepository)
             {
                 if (File.Exists(objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt"))File.Delete(objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt");
+                Console.WriteLine("- Created file " + objModPath + @"\Objects modificated in " + CleanFileName(chg.ChangelogCode) + " .txt");
             }
 
             foreach (ObjectClass obj in ObjectClassRepository.objectRepository)
@@ -74,6 +77,7 @@ namespace NAV_Comment_tool.saveTool
         public static bool SaveDocumentationToFile(string path, string documentation)
         {
             File.WriteAllText(path + @"Documentation .txt", documentation);
+            Console.WriteLine("- Created file " + path + @"Documentation .txt");
             return true;
         }
     }
